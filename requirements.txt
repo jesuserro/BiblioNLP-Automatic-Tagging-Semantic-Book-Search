@@ -2,4 +2,6 @@ pandas==2.2.3
 sqlalchemy==2.0.39
 pymysql==1.1.1
 configparser==7.2.0
-os-sys==2.1.4
+nltk==3.8.1
+transformers==4.33.2
+torch==2.0.1
