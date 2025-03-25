@@ -26,9 +26,16 @@ def get_database_connection(config):
     engine = create_engine(f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}')
     return engine
 
-def fetch_table_as_dataframe(engine, table_name):
+def read_sql_file(file_path):
     """
-    Consulta una tabla de la base de datos y devuelve un DataFrame.
+    Lee el contenido de un archivo .sql y devuelve la consulta como una cadena.
     """
-    query = f"SELECT * FROM {table_name}"
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
+
+def fetch_query_as_dataframe(engine, sql_file_path):
+    """
+    Ejecuta una consulta SQL desde un archivo .sql y devuelve un DataFrame.
+    """
+    query = read_sql_file(sql_file_path)
     return pd.read_sql(query, engine)
