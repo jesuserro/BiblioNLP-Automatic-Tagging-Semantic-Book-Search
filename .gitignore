@@ -1,0 +1,12 @@
+__pycache__/
+*.pid
+*.bak
+*.log
+*.db
+*.sqlite3
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+.history/
+.vscode/
