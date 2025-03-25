@@ -13,7 +13,7 @@
 
 ## 📂 Estructura del Proyecto
 ```
-BiblioNLP/
+BiblioNLP-Automatic-Tagging-Semantic-Book-Search/
 ├── data/
 │   ├── raw/             # Datos crudos (blurbs, reseñas, etc.)
 │   └── processed/       # Datos procesados para uso del modelo
