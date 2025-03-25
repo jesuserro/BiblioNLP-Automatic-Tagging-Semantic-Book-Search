@@ -93,6 +93,6 @@ Este proyecto se distribuye bajo la licencia [MIT](LICENSE). ¡Siéntete libre d
 
 ---
 
-> **Nota:** Este repositorio es parte de un proyecto de aprendizaje e investigación de NLP, por lo cual no garantiza escalabilidad de producción sin ajustes adicionales. Para más información, contacta al autor en [LinkedIn](https://www.linkedin.com).
+> **Nota:** Este repositorio es parte de un proyecto de aprendizaje e investigación de NLP, por lo cual no garantiza escalabilidad de producción sin ajustes adicionales. 
 
 ¡Gracias por visitar **BiblioNLP** y que disfrutes explorando el mundo de los libros con NLP! 🎉
