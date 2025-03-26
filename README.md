@@ -46,7 +46,14 @@ BiblioNLP-Automatic-Tagging-Semantic-Book-Search/
    ```bash
    python3 -m venv venv
    source venv/bin/activate
+   
    which python
+   # ---> /mnt/c/Users/jesus/Documents/Ironhack/DataAnalyticsFeb2025/Unit 7 - Machine Learning/BiblioNLP-Automatic-Tagging-Semantic-Book-Search/venv/bin/python
+
+   # Instalar kernel para jupiter
+   python3 -m pip install ipykernel
+   python -m ipykernel install --user --name=biblionlp --display-name "BiblioNLP (venv)"
+   jupyter kernelspec list
 
    pip install -r requirements.txt
    ```
