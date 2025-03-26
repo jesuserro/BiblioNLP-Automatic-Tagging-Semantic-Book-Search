@@ -16,3 +16,5 @@ config.cfg
 venv/
 
 src/tagging/model/sentence_bert.joblib
+
+__init__.py
