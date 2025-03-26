@@ -15,6 +15,6 @@ config.cfg
 # Entorno virtual
 venv/
 
-src/tagging/model/sentence_bert.joblib
+model/book_tagging_pipeline_sentence_bert.joblib
 
 __init__.py
