@@ -2,6 +2,7 @@ import streamlit as st
 import joblib
 from sentence_transformers import SentenceTransformer
 import numpy as np
+import pandas as pd
 
 # Configuración de la página
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
@@ -58,3 +59,75 @@ if submit_button:
         for i, tags in enumerate(predicted_tags):
             st.markdown(f"**Libro {i + 1}:** {titles[i]}")
             st.write(f"Etiquetas: {', '.join(tags) if tags else 'Ninguna etiqueta detectada'}")
+
+# Ui parte 2
+
+from sklearn.metrics.pairwise import cosine_similarity
+import time  # Para simular progreso
+
+# Cargar el modelo de recomendación
+@st.cache_resource
+def load_recommendation_model():
+    model = joblib.load("model/book_recommendation_by_tags.joblib")
+    df = pd.read_csv("data/processed/books.csv")
+    
+    # Generar la columna 'text' combinando 'book_title' y 'blurb'
+    df['text'] = df['book_title'].fillna('') + '. ' + df['blurb'].fillna('')
+    
+    return model, df
+
+recommendation_model, books_df = load_recommendation_model()
+
+# Función para recomendar libros
+def recommend_books_by_tags(input_tags, top_n=5):
+    if not input_tags:
+        return pd.DataFrame()  # Retornar un DataFrame vacío si no hay tags
+
+    tags_text = ", ".join(input_tags)
+    
+    # Mostrar spinner mientras se generan los embeddings
+    with st.spinner("Generando recomendaciones, por favor espera..."):
+        tags_embedding = recommendation_model.encode([tags_text])
+        book_embeddings = recommendation_model.encode(books_df['text'].tolist())
+        
+        # Simular progreso
+        progress_bar = st.progress(0)
+        for i in range(100):
+            time.sleep(0.01)  # Simular tiempo de procesamiento
+            progress_bar.progress(i + 1)
+        
+        # Calcular similitudes
+        similarities = cosine_similarity(tags_embedding, book_embeddings).flatten()
+        top_indices = similarities.argsort()[-top_n:][::-1]
+        recommended_books = books_df.iloc[top_indices][['book_title', 'tags']]
+    
+    return recommended_books
+
+# Manejar estado para los resultados
+if "recommended_books" not in st.session_state:
+    st.session_state["recommended_books"] = None
+
+# Formulario de entrada para recomendación
+with st.form(key="recommendation_form"):
+    tags_input = st.text_input("Introduce etiquetas separadas por comas", key="tags_input")
+    num_recommendations = st.number_input("Número de libros a recomendar", min_value=1, max_value=10, value=5)
+    recommend_button = st.form_submit_button(label="Recomendar")
+
+# Al hacer submit en el formulario de recomendación
+if recommend_button:
+    if tags_input.strip() == "":
+        st.warning("Por favor, introduce al menos una etiqueta.")
+    else:
+        input_tags = [tag.strip() for tag in tags_input.split(",")]
+        st.session_state["recommended_books"] = recommend_books_by_tags(input_tags, top_n=num_recommendations)
+
+# Mostrar resultados si existen
+if st.session_state["recommended_books"] is not None:
+    recommended_books = st.session_state["recommended_books"]
+    if recommended_books.empty:
+        st.warning("No se encontraron libros recomendados para las etiquetas proporcionadas.")
+    else:
+        st.success("Libros recomendados:")
+        for _, row in recommended_books.iterrows():
+            st.markdown(f"**Título:** {row['book_title']}")
+            st.write(f"Etiquetas: {row['tags']}")
