@@ -88,6 +88,20 @@ BiblioNLP-Automatic-Tagging-Semantic-Book-Search/
 - 🗂 **Base Vectorial**: [Pinecone](https://www.pinecone.io/)
 - 🏷 **Visualización**: (opcional) [Streamlit](https://streamlit.io/) o [Flask](https://flask.palletsprojects.com/)
 
+## Instalar kernel para jupiter
+
+A veces Jupyter no trabaja con los paquetes instalados desde la terminal. En una celda de Jupyter hay que hacer:
+
+```bash
+!pip install modulo 
+
+%pip install modulo
+
+pip install modulo
+
+pip + restart + import
+```
+
 ## 🙌 Contribuciones
 
 ¡Las contribuciones son siempre bienvenidos!
