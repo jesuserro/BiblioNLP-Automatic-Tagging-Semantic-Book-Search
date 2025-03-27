@@ -90,12 +90,14 @@ python src/search/semantic_search.py --query "magia y aventuras"
 ## 🛠 Técnicas y Modelos
 
 ### 1. **Pipeline de Generación de Etiquetas**
+
 - **Input**: Combina títulos y descripciones de libros en un único campo de texto.
 - **Embeddings**: Generados con `SentenceTransformer` usando el modelo multilingüe `paraphrase-multilingual-MiniLM-L12-v2`.
 - **Clasificador**: Modelo de **Logistic Regression** envuelto en un `MultiOutputClassifier` para clasificación multilabel.
 - **Output**: Predice etiquetas relevantes (ej. `philosophy`, `science`, `to-read`).
 
 ### 2. **Pipeline de Análisis de Sentimientos**
+
 - **VADER**:
   - Herramienta basada en reglas para análisis de sentimientos.
   - Calcula puntajes de polaridad (`positive`, `negative`, `neutral`, `compound`).
@@ -105,6 +107,7 @@ python src/search/semantic_search.py --query "magia y aventuras"
   - Aplicado a descripciones de libros para obtener insights emocionales.
 
 ### 3. **Funciones Reutilizables**
+
 - **`predict_tags`**:
   - Predice etiquetas para nuevos libros basándose en sus títulos y descripciones.
   - Clasificación multilabel con umbral ajustable.
@@ -116,6 +119,7 @@ python src/search/semantic_search.py --query "magia y aventuras"
 ## 📊 Ejemplo de Resultados
 
 ### Generación de Etiquetas
+
 ```python
 new_titles = ["La conspiración del universo"]
 new_blurbs = ["Una historia que entrelaza ciencia, fe y filosofía para revelar los secretos de la creación."]
@@ -125,10 +129,17 @@ print(predicted_tags)
 ```
 
 ### Análisis de Sentimientos
+
 - **VADER**: Visualiza la distribución de sentimientos (`compound` scores).
 - **RoBERTa**: Analiza emociones como `joy` o `sadness` en descripciones de libros.
 
 ---
+
+## 🛠 Streamlit
+
+```python
+streamlit run src/apps/app_streamlit.py --server.runOnSave true
+```
 
 ## 🛠 Tecnologías y Herramientas
 
