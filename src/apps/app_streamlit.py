@@ -6,6 +6,12 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import time
 
+# Constantes para las URLs de los modelos
+TAGGING_MODEL_URL = "model/book_tagging_pipeline.joblib"
+CLUSTERING_MODEL_URL = "model/book_clustering_kmeans.joblib"
+MLB_MODEL_URL = "model/book_tagging_pipeline_mlb.joblib"
+RECOMMENDATION_MODEL_URL = "model/book_recommendation_by_tags.joblib"
+
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
 
 st.title("BiblioNLP - Predicción automática de etiquetas")
@@ -15,10 +21,10 @@ st.markdown(
 
 @st.cache_resource
 def load_models():
-    clf = joblib.load("model/book_tagging_pipeline.joblib")
-    mlb = joblib.load("model/book_tagging_pipeline_mlb.joblib")
+    clf = joblib.load(TAGGING_MODEL_URL)
+    mlb = joblib.load(MLB_MODEL_URL)
     model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
-    clustering_model = joblib.load("model/book_clustering_kmeans.joblib")
+    clustering_model = joblib.load(CLUSTERING_MODEL_URL)
     return clf, mlb, model
 
 clf, mlb, embedding_model = load_models()
@@ -60,7 +66,7 @@ with tab1:
                 predicted_tags = mlb.inverse_transform(preds)
 
                 # Predicción de clustering
-                clustering_model = joblib.load("model/book_clustering_kmeans.joblib")
+                clustering_model = joblib.load(CLUSTERING_MODEL_URL)
                 clusters = clustering_model.predict(X_test)
 
             st.success("Resultados:")
@@ -88,7 +94,7 @@ with tab2:
         else:
             input_tags = [tag.strip() for tag in tags_input.split(",")]
             
-            recommendation_model = joblib.load("model/book_recommendation_by_tags.joblib")
+            recommendation_model = joblib.load(RECOMMENDATION_MODEL_URL)
 
             with st.spinner("Buscando libros similares..."):
                 progress_bar = st.progress(0)
