@@ -7,9 +7,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 import time
 
 # Constantes para las URLs de los modelos
-TAGGING_MODEL_URL = "model/book_tagging_pipeline.joblib"
-CLUSTERING_MODEL_URL = "model/book_clustering_kmeans.joblib"
-MLB_MODEL_URL = "model/book_tagging_pipeline_mlb.joblib"
+TAGGING_MODEL_URL        = "model/book_tagging_pipeline_cross_validated.joblib"
+MLB_MODEL_URL            = "model/book_tagging_pipeline_mlb_cross_validated.joblib"
+CLUSTERING_MODEL_URL     = "model/book_clustering_kmeans.joblib"
 RECOMMENDATION_MODEL_URL = "model/book_recommendation_by_tags.joblib"
 
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")

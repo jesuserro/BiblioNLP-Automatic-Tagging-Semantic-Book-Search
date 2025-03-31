@@ -16,6 +16,7 @@ config.cfg
 venv/
 
 model/book_tagging_pipeline_sentence_bert.joblib
+model/book_tagging_pipeline_sentence_bert_cross_validated.joblib
 model/book_recommendation_by_tags.joblib
 
 __init__.py
