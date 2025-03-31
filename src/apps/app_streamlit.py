@@ -52,16 +52,12 @@ clf, mlb, embedding_model = load_models()
 # Crear pestañas
 tab1, tab2 = st.tabs(["Predicción de etiquetas", "Recomendaciones"])
 
-# ...existing code...
-
 # === TAB 1 ===
 with tab1:
     with st.form(key="tag_form"):
-        # Cambiar el valor por defecto a 2 libros
-        num_books = st.number_input("¿Cuántos libros deseas evaluar?", min_value=1, max_value=5, value=2)
         titles, blurbs = [], []
 
-        for i in range(num_books):
+        for i in range(2):  # Mostrar siempre 2 libros por defecto
             st.subheader(f"Libro {i + 1}")
             title = st.text_input(
                 f"Título del libro {i + 1}",
@@ -115,49 +111,57 @@ with tab1:
 # === TAB 2 ===
 with tab2:
     with st.form(key="recommendation_form"):
-        tags_input = st.text_input(
-            "Introduce etiquetas separadas por comas",
-            value=DEFAULT_TAGS_INPUT
-        )
+        tags_inputs = []
+        for i in range(2):  # Mostrar siempre 2 sets de etiquetas por defecto
+            st.subheader(f"Set de etiquetas {i + 1}")
+            tags_input = st.text_input(
+                f"Introduce etiquetas separadas por comas (Set {i + 1})",
+                key=f"tags_input_{i}",
+                value=DEFAULT_TAGS_INPUT if i == 0 else "deportes, fútbol, messi"
+            )
+            tags_inputs.append(tags_input)
+
         num_recommendations = st.number_input("Número de libros a recomendar", min_value=1, max_value=10, value=5)
         recommend_button = st.form_submit_button(label="Recomendar")
 
     if recommend_button:
-        if tags_input.strip() == "":
-            st.warning("Por favor, introduce al menos una etiqueta.")
+        if any(tags.strip() == "" for tags in tags_inputs):
+            st.warning("Por favor, introduce al menos una etiqueta en cada set.")
         else:
-            input_tags = [tag.strip() for tag in tags_input.split(",")]
-            
             recommendation_model = joblib.load(RECOMMENDATION_MODEL_URL)
+            books_df = pd.read_csv("data/processed/books.csv")
+            book_embeddings = recommendation_model.encode(books_df["blurb"].tolist())
 
-            with st.spinner("Buscando libros sobre esas temáticas..."):
-                progress_bar = st.progress(0)
+            st.success("Resultados:")
+            for i, tags_input in enumerate(tags_inputs):
+                input_tags = [tag.strip() for tag in tags_input.split(",")]
 
-                tags_text = ", ".join(input_tags)
-                tags_embedding = recommendation_model.encode([tags_text])
-                books_df = pd.read_csv("data/processed/books.csv")
-                book_embeddings = recommendation_model.encode(books_df["blurb"].tolist())
+                with st.spinner(f"Buscando libros para el Set {i + 1}..."):
+                    progress_bar = st.progress(0)
 
-                for i in range(50):
-                    time.sleep(0.01)
-                    progress_bar.progress(int((i + 1) * 100 / 50))
+                    tags_text = ", ".join(input_tags)
+                    tags_embedding = recommendation_model.encode([tags_text])
 
-                similarities = cosine_similarity(tags_embedding, book_embeddings).flatten()
-                top_indices = similarities.argsort()[-num_recommendations:][::-1]
-                recommended_books = books_df.iloc[top_indices][["book_title", "tags"]]
+                    for j in range(50):
+                        time.sleep(0.01)
+                        progress_bar.progress(int((j + 1) * 100 / 50))
 
-            if recommended_books.empty:
-                st.warning("No se encontraron libros recomendados para las etiquetas proporcionadas.")
-            else:
-                st.success("Libros recomendados:")
-                for _, row in recommended_books.iterrows():
-                    st.markdown(
-                        f"""
-                        <div style="border: 1px solid #444; border-radius: 8px; padding: 10px; margin-bottom: 15px; background-color: #1e1e1e;">
-                            <h4 style="color: #f1f1f1; margin-bottom: 5px;">📖 {row['book_title']}</h4>
-                            <p style="margin: 0; color: #cccccc;"><strong>Etiquetas:</strong> 
-                            <span style="color: #00aced;">{', '.join(row['tags'].split(', '))}</span></p>
-                        </div>
-                        """,
-                        unsafe_allow_html=True,
-                    )
+                    similarities = cosine_similarity(tags_embedding, book_embeddings).flatten()
+                    top_indices = similarities.argsort()[-num_recommendations:][::-1]
+                    recommended_books = books_df.iloc[top_indices][["book_title", "tags"]]
+
+                if recommended_books.empty:
+                    st.warning(f"No se encontraron libros recomendados para el Set {i + 1}.")
+                else:
+                    st.markdown(f"## Recomendaciones para el Set {i + 1}:")
+                    for _, row in recommended_books.iterrows():
+                        st.markdown(
+                            f"""
+                            <div style="border: 1px solid #444; border-radius: 8px; padding: 10px; margin-bottom: 15px; background-color: #1e1e1e;">
+                                <h4 style="color: #f1f1f1; margin-bottom: 5px;">📖 {row['book_title']}</h4>
+                                <p style="margin: 0; color: #cccccc;"><strong>Etiquetas:</strong> 
+                                <span style="color: #00aced;">{', '.join(row['tags'].split(', '))}</span></p>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
