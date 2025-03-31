@@ -66,12 +66,12 @@ with tab1:
             st.success("Resultados:")
             clustering_books_df = pd.read_csv("data/processed/clustering_books.csv")
             for i, (tags, cluster) in enumerate(zip(predicted_tags, clusters)):
-                st.markdown(f"**Libro {i + 1}:** {titles[i]}")
-                st.write(f"Etiquetas: {', '.join(tags) if tags else 'Ninguna etiqueta detectada'}")
-
+                st.markdown(f"## Libro {i + 1}: {titles[i]}")
+                st.write(f"Etiquetas: `{', '.join(tags)}`" if tags else "Ninguna etiqueta detectada")
+                
                 # Mostrar libros similares del mismo cluster
                 cluster_books = clustering_books_df[clustering_books_df["cluster"] == cluster].head(5)
-                st.markdown("**Libros similares en el mismo cluster:**")
+                st.markdown("## Libros similares en el mismo cluster:")
                 for idx, row in cluster_books.iterrows():
                     st.markdown(f"- {row['book_title']}")
 
