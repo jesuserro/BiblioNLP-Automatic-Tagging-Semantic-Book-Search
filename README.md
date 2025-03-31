@@ -92,7 +92,7 @@ python src/search/semantic_search.py --query "magia y aventuras"
 ### 1. **Pipeline de Generación de Etiquetas**
 
 - **Input**: Combina títulos y descripciones de libros en un único campo de texto.
-- **Embeddings**: Generados con `SentenceTransformer` usando el modelo multilingüe `paraphrase-multilingual-MiniLM-L12-v2`.
+- **Embeddings**: Generados con `SentenceTransformer` usando el modelo multilingüe `paraphrase-multilingual-MiniLM-L12-v2`: <[sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)>
 - **Clasificador**: Modelo de **Logistic Regression** envuelto en un `MultiOutputClassifier` para clasificación multilabel.
 - **Output**: Predice etiquetas relevantes (ej. `philosophy`, `science`, `to-read`).
 
