@@ -18,21 +18,13 @@ def load_models():
     clf = joblib.load("model/book_tagging_pipeline.joblib")
     mlb = joblib.load("model/book_tagging_pipeline_mlb.joblib")
     model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
+    clustering_model = joblib.load("model/book_clustering_kmeans.joblib")
     return clf, mlb, model
 
 clf, mlb, embedding_model = load_models()
 
-@st.cache_resource
-def load_recommendation_model():
-    model = joblib.load("model/book_recommendation_by_tags.joblib")
-    df = pd.read_csv("data/processed/books.csv")
-    df["text"] = df["book_title"].fillna("") + ". " + df["blurb"].fillna("")
-    return model, df
-
-recommendation_model, books_df = load_recommendation_model()
-
-# Tabs UI
-tab1, tab2 = st.tabs(["📌 Predicción de etiquetas", "📚 Recomendación de libros"])
+# Crear pestañas
+tab1, tab2 = st.tabs(["Predicción de etiquetas", "Recomendaciones"])
 
 # === TAB 1 ===
 with tab1:
@@ -53,7 +45,7 @@ with tab1:
         if any(t.strip() == "" or b.strip() == "" for t, b in zip(titles, blurbs)):
             st.warning("Por favor, completa todos los títulos y blurbs.")
         else:
-            with st.spinner("Generando etiquetas..."):
+            with st.spinner("Generando etiquetas y clustering..."):
                 progress_bar = st.progress(0)
                 texts = [t + ". " + b for t, b in zip(titles, blurbs)]
                 X_test = embedding_model.encode(texts)
@@ -62,14 +54,26 @@ with tab1:
                     time.sleep(0.01)
                     progress_bar.progress(i + 1)
 
+                # Predicción de etiquetas
                 preds_proba = np.array([proba[:, 1] for proba in clf.predict_proba(X_test)]).T
                 preds = (preds_proba >= 0.3).astype(int)
                 predicted_tags = mlb.inverse_transform(preds)
 
-            st.success("Etiquetas predichas:")
-            for i, tags in enumerate(predicted_tags):
+                # Predicción de clustering
+                clustering_model = joblib.load("model/book_clustering_kmeans.joblib")
+                clusters = clustering_model.predict(X_test)
+
+            st.success("Resultados:")
+            clustering_books_df = pd.read_csv("data/processed/clustering_books.csv")
+            for i, (tags, cluster) in enumerate(zip(predicted_tags, clusters)):
                 st.markdown(f"**Libro {i + 1}:** {titles[i]}")
                 st.write(f"Etiquetas: {', '.join(tags) if tags else 'Ninguna etiqueta detectada'}")
+
+                # Mostrar libros similares del mismo cluster
+                cluster_books = clustering_books_df[clustering_books_df["cluster"] == cluster].head(5)
+                st.markdown("**Libros similares en el mismo cluster:**")
+                for idx, row in cluster_books.iterrows():
+                    st.markdown(f"- {row['book_title']}")
 
 # === TAB 2 ===
 with tab2:
