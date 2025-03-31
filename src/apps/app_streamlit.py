@@ -87,13 +87,16 @@ with tab2:
             st.warning("Por favor, introduce al menos una etiqueta.")
         else:
             input_tags = [tag.strip() for tag in tags_input.split(",")]
+            
+            recommendation_model = joblib.load("model/book_recommendation_by_tags.joblib")
 
             with st.spinner("Buscando libros similares..."):
                 progress_bar = st.progress(0)
 
                 tags_text = ", ".join(input_tags)
                 tags_embedding = recommendation_model.encode([tags_text])
-                book_embeddings = recommendation_model.encode(books_df["text"].tolist())
+                books_df = pd.read_csv("data/processed/books.csv")
+                book_embeddings = recommendation_model.encode(books_df["blurb"].tolist())
 
                 for i in range(50):
                     time.sleep(0.01)
