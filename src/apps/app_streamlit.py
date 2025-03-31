@@ -12,6 +12,20 @@ MLB_MODEL_URL            = "model/book_tagging_pipeline_mlb_cross_validated.jobl
 CLUSTERING_MODEL_URL     = "model/book_clustering_kmeans.joblib"
 RECOMMENDATION_MODEL_URL = "model/book_recommendation_by_tags.joblib"
 
+# Constantes para valores por defecto
+DEFAULT_BOOK_TITLE = "The Dark Interval: Letters on Loss, Grief, and Transformation"
+DEFAULT_BOOK_BLURB = (
+    "From the writer of the classic Letters to a Young Poet, reflections on grief and loss, collected and published here in one volume for the first time.\n\n"
+    "“A great poet’s reflections on our greatest mystery.”—Billy Collins\n\n"
+    "“A treasure . . . The solace Rilke offers is uncommon, uplifting and necessary.”—The Guardian\n\n"
+    "Gleaned from Rainer Maria Rilke’s voluminous, never-before-translated letters to bereaved friends and acquaintances, The Dark Interval is a profound vision of the mourning process and a meditation on death’s place in our lives. Following the format of Letters to a Young Poet, this book arranges Rilke’s letters into an uninterrupted sequence, showcasing the full range of the great author’s thoughts on death and dying, as well as his sensitive and moving expressions of consolation and condolence.\n\n"
+    "Presented with care and authority by master translator Ulrich Baer, The Dark Interval is a literary treasure, an indispensable resource for anyone searching for solace, comfort, and meaning in a time of grief.\n\n"
+    "Praise for The Dark Interval\n\n"
+    "“Even though each of these letters of condolence is personalized with intimate detail, together they hammer home Rilke’s remarkable truth about the death of another: that the pain of it can force us into a ‘deeper . . . level of life’ and render us more ‘vibrant.’ Here we have a great poet’s reflections on our greatest mystery.”—Billy Collins\n\n"
+    "“As we live our lives, it is possible to feel not sadness or melancholy but a rush of power as the life of others passes into us. This rhapsodic volume teaches us that death is not a negation but a deepening experience in the onslaught of existence. What a wise and victorious book!”—Henri Cole"
+)
+DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
+
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
 
 st.title("BiblioNLP - Predicción automática de etiquetas")
@@ -40,8 +54,16 @@ with tab1:
 
         for i in range(num_books):
             st.subheader(f"Libro {i + 1}")
-            title = st.text_input(f"Título del libro {i + 1}", key=f"title_{i}")
-            blurb = st.text_area(f"Blurb / Sinopsis del libro {i + 1}", key=f"blurb_{i}")
+            title = st.text_input(
+                f"Título del libro {i + 1}",
+                key=f"title_{i}",
+                value=DEFAULT_BOOK_TITLE if i == 0 else ""
+            )
+            blurb = st.text_area(
+                f"Blurb / Sinopsis del libro {i + 1}",
+                key=f"blurb_{i}",
+                value=DEFAULT_BOOK_BLURB if i == 0 else ""
+            )
             titles.append(title)
             blurbs.append(blurb)
 
@@ -84,7 +106,10 @@ with tab1:
 # === TAB 2 ===
 with tab2:
     with st.form(key="recommendation_form"):
-        tags_input = st.text_input("Introduce etiquetas separadas por comas")
+        tags_input = st.text_input(
+            "Introduce etiquetas separadas por comas",
+            value=DEFAULT_TAGS_INPUT
+        )
         num_recommendations = st.number_input("Número de libros a recomendar", min_value=1, max_value=10, value=5)
         recommend_button = st.form_submit_button(label="Recomendar")
 
