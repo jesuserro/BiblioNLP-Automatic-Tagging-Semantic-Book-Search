@@ -24,6 +24,12 @@ DEFAULT_BOOK_BLURB = (
     "“Even though each of these letters of condolence is personalized with intimate detail, together they hammer home Rilke’s remarkable truth about the death of another: that the pain of it can force us into a ‘deeper . . . level of life’ and render us more ‘vibrant.’ Here we have a great poet’s reflections on our greatest mystery.”—Billy Collins\n\n"
     "“As we live our lives, it is possible to feel not sadness or melancholy but a rush of power as the life of others passes into us. This rhapsodic volume teaches us that death is not a negation but a deepening experience in the onslaught of existence. What a wise and victorious book!”—Henri Cole"
 )
+DEFAULT_BOOK_TITLE_2 = "Messi: Edición revisada y actualizada (Biografías y memorias)"
+DEFAULT_BOOK_BLURB_2 = (
+    "Leo Messi es el jugador de fútbol más conocido del planeta, pero también un enigma como persona, por su hermetismo. Esta biografía, que fue publicada por primera vez en 2014, y posteriormente actualizada en 2018, se presenta de nuevo en una edición que recoge lo más relevante de los últimos años del jugador en el Fútbol Club Barcelona. \n\n"
+    "En esta nueva edición, el autor repasa lo más destacado desde aquel fatídico Mundial de Brasil hasta el final de la temporada 2017/18, así como su paso por el Mundial de Rusia y por la Copa América 2021, que coincidía con el momento en que expiraba su contrato con el Fútbol Club Barcelona, y que convirtió al astro argentino en foco de todas las miradas, generando una enorme expectación.\n\n"
+    "En agosto de 2021, se anunció el desenlace que parecía imposible: Messi no pudo renovar en el Barça y se anunció su fichaje por el PSG. ¿Qué pasó? ¿Cómo es posible que, queriendo quedarse, tuviera que salir?"
+)
 DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
 
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
@@ -46,10 +52,13 @@ clf, mlb, embedding_model = load_models()
 # Crear pestañas
 tab1, tab2 = st.tabs(["Predicción de etiquetas", "Recomendaciones"])
 
+# ...existing code...
+
 # === TAB 1 ===
 with tab1:
     with st.form(key="tag_form"):
-        num_books = st.number_input("¿Cuántos libros deseas evaluar?", min_value=1, max_value=5, value=1)
+        # Cambiar el valor por defecto a 2 libros
+        num_books = st.number_input("¿Cuántos libros deseas evaluar?", min_value=1, max_value=5, value=2)
         titles, blurbs = [], []
 
         for i in range(num_books):
@@ -57,12 +66,12 @@ with tab1:
             title = st.text_input(
                 f"Título del libro {i + 1}",
                 key=f"title_{i}",
-                value=DEFAULT_BOOK_TITLE if i == 0 else ""
+                value=DEFAULT_BOOK_TITLE if i == 0 else (DEFAULT_BOOK_TITLE_2 if i == 1 else "")
             )
             blurb = st.text_area(
                 f"Blurb / Sinopsis del libro {i + 1}",
                 key=f"blurb_{i}",
-                value=DEFAULT_BOOK_BLURB if i == 0 else ""
+                value=DEFAULT_BOOK_BLURB if i == 0 else (DEFAULT_BOOK_BLURB_2 if i == 1 else "")
             )
             titles.append(title)
             blurbs.append(blurb)
@@ -121,7 +130,7 @@ with tab2:
             
             recommendation_model = joblib.load(RECOMMENDATION_MODEL_URL)
 
-            with st.spinner("Buscando libros similares..."):
+            with st.spinner("Buscando libros sobre esas temáticas..."):
                 progress_bar = st.progress(0)
 
                 tags_text = ", ".join(input_tags)
