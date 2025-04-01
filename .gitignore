@@ -26,3 +26,5 @@ model/cv_fold_2
 model/cv_fold_3
 model/cv_fold_4
 model/cv_fold_5
+
+data/raw/goodreads_data.csv
