@@ -20,3 +20,9 @@ model/book_tagging_pipeline_sentence_bert_cross_validated.joblib
 model/book_recommendation_by_tags.joblib
 
 __init__.py
+
+model/cv_fold_1
+model/cv_fold_2
+model/cv_fold_3
+model/cv_fold_4
+model/cv_fold_5
