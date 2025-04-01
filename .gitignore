@@ -28,3 +28,4 @@ model/cv_fold_4
 model/cv_fold_5
 
 data/raw/goodreads_data.csv
+model/vectors.npy
