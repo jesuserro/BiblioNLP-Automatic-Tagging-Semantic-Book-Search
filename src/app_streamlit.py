@@ -401,11 +401,11 @@ with tab2:
                                 # Etiquetas reales con coincidencias resaltadas
                                 real_tags = row["tags"].split(", ")
                                 formatted_real_tags = format_real_tags(real_tags, predicted_tags)
-                                st.markdown(f"**Etiquetas reales:** {formatted_real_tags}", unsafe_allow_html=True)
+                                st.markdown(f"- **Etiquetas reales:** {formatted_real_tags}", unsafe_allow_html=True)
 
                                 # Formatear etiquetas predichas
                                 formatted_tags = format_predicted_tags(predicted_tags, real_tags, scores)
-                                st.markdown(f"**Etiquetas predichas:** {formatted_tags}", unsafe_allow_html=True)
+                                st.markdown(f"- **Etiquetas predichas:** {formatted_tags}", unsafe_allow_html=True)
 
                                 # Predicción de etiquetas Pinecone
                                 ensemble_result = predict_with_ensemble(row["book_title"], row["blurb"])
@@ -413,12 +413,12 @@ with tab2:
                                 pinecone_scores = [0.5] * len(pinecone_tags)  # Placeholder scores
                                 # formatted_pinecone_tags = format_predicted_tags(pinecone_tags, real_tags, pinecone_scores)
                                 formatted_pinecone_tags = format_pinecone_tags(pinecone_tags, real_tags)
-                                st.markdown(f"**Etiquetas Pinecone:** {formatted_pinecone_tags}", unsafe_allow_html=True)
+                                st.markdown(f"- **Etiquetas Pinecone:** {formatted_pinecone_tags}", unsafe_allow_html=True)
 
                                 # Etiquetas sustantivas
                                 noun_tags = ensemble_result["tags_nouns"]
                                 formatted_noun_tags = format_noun_tags(noun_tags, real_tags)
-                                st.markdown(f"**Etiquetas sustantivas:** {formatted_noun_tags}", unsafe_allow_html=True)
+                                st.markdown(f"- **Etiquetas sustantivas:** {formatted_noun_tags}", unsafe_allow_html=True)
                             with col2:
                                 sentiments = analyze_sentiments(row["blurb"])
                                 fig = plot_sentiments(sentiments)
