@@ -8,6 +8,19 @@ import time
 import matplotlib.pyplot as plt
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
+import spacy
+from collections import Counter
+import sys
+import subprocess
+from pinecone import Pinecone, ServerlessSpec, exceptions
+from spacy.lang.en.stop_words import STOP_WORDS as STOP_WORDS_EN
+from spacy.lang.es.stop_words import STOP_WORDS as STOP_WORDS_ES
+import re
+
+st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
+
+# st.write(f"Python executable: {sys.executable}")
+# st.write(f"Python version: {sys.version}")
 
 # Constantes para las URLs de los modelos
 TAGGING_MODEL_URL        = "model/book_tagging_pipeline.joblib"
@@ -40,8 +53,6 @@ DEFAULT_BOOK_BLURB_2 = (
 )
 DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
 TAGS_INPUT_2       = "deportes, fútbol, messi"
-
-st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
 
 st.title("BiblioNLP - Predicción automática de etiquetas")
 st.markdown(
@@ -91,6 +102,107 @@ def format_predicted_tags(predicted_tags, real_tags, scores):
             green_intensity = int(score * 255)
             formatted_tags.append(f'<span style="color:rgb({red_intensity},{green_intensity},0)">{tag}</span>')
     return ", ".join(formatted_tags)
+
+# Pinecone: Cargar modelo de spaCy para sustantivos
+# Inicializar Pinecone
+PINECONE_API_KEY = "pcsk_3NHcD2_85bKajTDUbSE838cvf95Yks2StS6UxLXyPYjLJ9Twsi24h43bNCdxKQ3y5ArQYi"  # Reemplaza con tu API Key de Pinecone
+PINECONE_ENV = "us-east-1"  # Reemplaza con tu entorno de Pinecone
+INDEX_NAME = "book-embeddings"  # Nombre del índice usado en el notebook
+
+# Inicializar Pinecone usando la nueva API
+try:
+    pc = Pinecone(api_key=PINECONE_API_KEY)
+    if INDEX_NAME not in pc.list_indexes().names():
+        # Crear el índice si no existe
+        pc.create_index(
+            name=INDEX_NAME,
+            dimension=768,  # Cambia esto según las dimensiones de tus embeddings
+            metric="cosine",
+            spec=ServerlessSpec(cloud="aws", region=PINECONE_ENV)
+        )
+        st.info("Índice creado correctamente.")
+    else:
+        st.info("Índice ya existente. Conectando...")
+
+    # Obtener el índice
+    index = pc.Index(INDEX_NAME)
+except exceptions.PineconeApiException as e:
+    st.error(f"Error al inicializar Pinecone: {e}")
+    st.stop()
+except Exception as e:
+    st.error(f"Error inesperado al inicializar Pinecone: {e}")
+    st.stop()
+
+# Función para predecir etiquetas fusionadas (Logistic Regression + Pinecone + Nouns)
+# Cargar modelo de spaCy
+try:
+    nlp = spacy.load("es_core_news_sm")
+except OSError:
+    import subprocess
+    subprocess.run(["python", "-m", "spacy", "download", "es_core_news_sm"])
+    nlp = spacy.load("es_core_news_sm")
+
+# Combinar stopwords en español e inglés
+STOPWORDS_COMBINADAS = STOP_WORDS_EN.union(STOP_WORDS_ES)
+
+# Expresión regular para sufijos verbales en español
+VERBAL_SUFFIXES_ES = re.compile(r"(ar|er|ir|ado|ido|ando|iendo|ándose|iéndose|éndose)$")
+
+# Función para predecir etiquetas fusionadas (Logistic Regression + Pinecone + Nouns)
+def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_nouns=True, pinecone_top_tags=6):
+    text = title + ". " + blurb
+    embedding = embedding_model.encode([text])[0]
+
+    # A. Logistic Regression
+    probs = np.array([estimator.predict_proba(embedding.reshape(1, -1))[0][1] for estimator in clf.estimators_])
+    pred_lr = (probs >= threshold).astype(int)
+    pred_lr = np.array([pred_lr])
+    tags_lr = list(mlb.inverse_transform(pred_lr)[0])
+
+    # B. Pinecone (top-K vecinos más cercanos)
+    pinecone_result = index.query(
+        vector=embedding.tolist(),
+        top_k=top_k,
+        include_metadata=True,
+        namespace="books"
+    )
+
+    pinecone_all_tags = []
+    for match in pinecone_result.matches:
+        if 'tags' in match.metadata and match.metadata['tags']:
+            pinecone_all_tags += [tag.strip().lower() for tag in match.metadata['tags'].split(',')]
+
+    pinecone_tag_counts = Counter(pinecone_all_tags)
+    tags_pinecone = [tag for tag, _ in pinecone_tag_counts.most_common(pinecone_top_tags)]
+
+    # C. Sustantivos relevantes del título y del blurb
+    tags_nouns = []
+    if enrich_with_nouns:
+        doc = nlp(title + ". " + blurb)
+        tags_nouns = sorted(set(
+            token.lemma_.lower()
+            for token in doc
+            if token.pos_ in ["NOUN", "PROPN"]
+            and token.pos_ not in ["VERB", "AUX"]
+            and not VERBAL_SUFFIXES_ES.search(token.lemma_.lower())
+            and token.lemma_.lower() not in STOPWORDS_COMBINADAS
+            and token.is_alpha
+            and len(token) > 3
+        ))
+
+    # D. Fusión final de tags
+    fusion_final = sorted(set(
+        [t.lower() for t in tags_lr] +
+        tags_pinecone +
+        tags_nouns
+    ))
+
+    return {
+        "tags_logistic": sorted(tags_lr),
+        "tags_pinecone": tags_pinecone,
+        "tags_nouns": tags_nouns,
+        "tags_fusion": fusion_final
+    }
 
 # Crear pestañas
 tab1, tab2 = st.tabs(["Predicción de etiquetas", "Recomendaciones"])
@@ -167,6 +279,7 @@ with tab2:
         num_recommendations = st.number_input("Número de libros a recomendar", min_value=1, max_value=10, value=5)
         recommend_button = st.form_submit_button(label="Recomendar")
 
+    # Actualizar el código de recomendaciones en tab2
     if recommend_button:
         if any(tags.strip() == "" for tags in tags_inputs):
             st.warning("Por favor, introduce al menos una etiqueta en cada set.")
@@ -216,6 +329,13 @@ with tab2:
                                 # Formatear etiquetas predichas
                                 formatted_tags = format_predicted_tags(predicted_tags, row["tags"].split(", "), scores)
                                 st.markdown(f"**Etiquetas predichas:** {formatted_tags}", unsafe_allow_html=True)
+
+                                # Predicción de etiquetas Pinecone
+                                ensemble_result = predict_with_ensemble(row["book_title"], row["blurb"])
+                                pinecone_tags = ensemble_result["tags_fusion"]
+                                pinecone_scores = [0.5] * len(pinecone_tags)  # Placeholder scores
+                                formatted_pinecone_tags = format_predicted_tags(pinecone_tags, row["tags"].split(", "), pinecone_scores)
+                                st.markdown(f"**Etiquetas Pinecone:** {formatted_pinecone_tags}", unsafe_allow_html=True)
                             with col2:
                                 sentiments = analyze_sentiments(row["blurb"])
                                 fig = plot_sentiments(sentiments)
