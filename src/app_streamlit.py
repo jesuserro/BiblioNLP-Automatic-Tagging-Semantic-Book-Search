@@ -152,6 +152,18 @@ def format_predicted_tags(predicted_tags, real_tags, scores):
             formatted_tags.append(f'<span style="color:rgb({red_intensity},{green_intensity},0)">{tag}</span>')
     return ", ".join(formatted_tags)
 
+# Función para colorear etiquetas sustantivas
+def format_noun_tags(noun_tags, real_tags):
+    formatted_tags = []
+    for tag in noun_tags:
+        if tag in real_tags:
+            # Verde para coincidencias con las etiquetas reales
+            formatted_tags.append(f'<span style="color:green">{tag}</span>')
+        else:
+            # Rojo para etiquetas que no coinciden con las reales
+            formatted_tags.append(f'<span style="color:red">{tag}</span>')
+    return ", ".join(formatted_tags)
+
 # Pinecone: Cargar modelo de spaCy para sustantivos
 # Inicializar Pinecone
 PINECONE_API_KEY = config["pinecone"]["api_key"]
@@ -386,10 +398,15 @@ with tab2:
 
                                 # Predicción de etiquetas Pinecone
                                 ensemble_result = predict_with_ensemble(row["book_title"], row["blurb"])
-                                pinecone_tags = ensemble_result["tags_fusion"]
+                                pinecone_tags = ensemble_result["tags_pinecone"]
                                 pinecone_scores = [0.5] * len(pinecone_tags)  # Placeholder scores
                                 formatted_pinecone_tags = format_predicted_tags(pinecone_tags, real_tags, pinecone_scores)
                                 st.markdown(f"**Etiquetas Pinecone:** {formatted_pinecone_tags}", unsafe_allow_html=True)
+
+                                # Etiquetas sustantivas
+                                noun_tags = ensemble_result["tags_nouns"]
+                                formatted_noun_tags = format_noun_tags(noun_tags, real_tags)
+                                st.markdown(f"**Etiquetas sustantivas:** {formatted_noun_tags}", unsafe_allow_html=True)
                             with col2:
                                 sentiments = analyze_sentiments(row["blurb"])
                                 fig = plot_sentiments(sentiments)
