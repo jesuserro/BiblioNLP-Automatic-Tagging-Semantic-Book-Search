@@ -338,7 +338,7 @@ with tab2:
             )
             tags_inputs.append(tags_input)
 
-        num_recommendations = st.number_input("Número de libros a recomendar", min_value=1, max_value=10, value=5)
+        num_recommendations = st.number_input("Número de libros a recomendar", min_value=1, max_value=10, value=10)
         recommend_button = st.form_submit_button(label="Recomendar")
 
     # Actualizar el código de recomendaciones en tab2
