@@ -377,10 +377,22 @@ with tab2:
                         time.sleep(0.01)
                         progress_bar.progress(int((j + 1) * 100 / 50))
 
+                    if i + 1 == 2:  # Si es el Set 2
+                        books_df = pd.read_csv("data/raw/goodreads_data.csv")
+                        books_df.rename(columns={"Book": "book_title", "Description": "blurb", "Genres": "tags"}, inplace=True)
+
+                        # Transformar las etiquetas en minúsculas y reemplazar espacios con guiones altos
+                        books_df["tags"] = books_df["tags"].apply(
+                            lambda x: ", ".join(tag.strip().lower().replace(" ", "-") for tag in eval(x))
+                        )
+                    else:
+                        books_df = pd.read_csv("data/processed/books.csv")
+
+                    # Calcular similitudes
                     similarities = cosine_similarity(tags_embedding, book_embeddings).flatten()
                     top_indices = similarities.argsort()[-num_recommendations:][::-1]
                     recommended_books = books_df.iloc[top_indices][["book_title", "blurb", "tags"]]
-
+                    
                     if recommended_books.empty:
                         st.warning(f"No se encontraron libros recomendados para el Set {i + 1}.")
                     else:
