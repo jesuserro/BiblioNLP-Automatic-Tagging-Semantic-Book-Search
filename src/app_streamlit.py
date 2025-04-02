@@ -132,12 +132,13 @@ def format_real_tags(real_tags, predicted_tags):
     for tag in real_tags:
         if tag in predicted_tags:
             # Verde para indicar coincidencia con las etiquetas predichas
-            formatted_tags.append(f'<span style="color:rgb(160, 245, 192)">{tag}</span>')
+            formatted_tags.append(f'<span style="color:green">{tag}</span>')
         else:
             # Color normal para las etiquetas que no coinciden
             formatted_tags.append(f'<span>{tag}</span>')
     return ", ".join(formatted_tags)
 
+# Función para colorear tags predichos
 # Función para colorear tags predichos
 def format_predicted_tags(predicted_tags, real_tags, scores):
     formatted_tags = []
@@ -146,10 +147,20 @@ def format_predicted_tags(predicted_tags, real_tags, scores):
             # Verde para coincidencias
             formatted_tags.append(f'<span style="color:green">{tag}</span>')
         else:
-            # Gradación de color basada en el score
-            red_intensity = int((1 - score) * 255)
-            green_intensity = int(score * 255)
-            formatted_tags.append(f'<span style="color:rgb({red_intensity},{green_intensity},0)">{tag}</span>')
+            # Amarillo (gold) para etiquetas que no coinciden
+            formatted_tags.append(f'<span style="color:gold">{tag}</span>')
+    return ", ".join(formatted_tags)
+
+# Función para colorear etiquetas Pinecone
+def format_pinecone_tags(pinecone_tags, real_tags):
+    formatted_tags = []
+    for tag in pinecone_tags:
+        if tag in real_tags:
+            # Verde para coincidencias con las etiquetas reales
+            formatted_tags.append(f'<span style="color:green">{tag}</span>')
+        else:
+            # Sin color para etiquetas que no coinciden
+            formatted_tags.append(f'<span style="color:gold">{tag}</span>')
     return ", ".join(formatted_tags)
 
 # Función para colorear etiquetas sustantivas
@@ -160,8 +171,8 @@ def format_noun_tags(noun_tags, real_tags):
             # Verde para coincidencias con las etiquetas reales
             formatted_tags.append(f'<span style="color:green">{tag}</span>')
         else:
-            # Rojo para etiquetas que no coinciden con las reales
-            formatted_tags.append(f'<span style="color:red">{tag}</span>')
+            # Sin color para etiquetas que no coinciden
+            formatted_tags.append(f'<span>{tag}</span>')
     return ", ".join(formatted_tags)
 
 # Pinecone: Cargar modelo de spaCy para sustantivos
@@ -267,7 +278,7 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
     }
 
 # Crear pestañas
-tab1, tab2 = st.tabs(["Predicción de etiquetas", "Recomendaciones"])
+tab1, tab2 = st.tabs(["Predicción de etiquetas de libros", "Recomendaciones de libros"])
 
 # === TAB 1 ===
 with tab1:
@@ -400,7 +411,8 @@ with tab2:
                                 ensemble_result = predict_with_ensemble(row["book_title"], row["blurb"])
                                 pinecone_tags = ensemble_result["tags_pinecone"]
                                 pinecone_scores = [0.5] * len(pinecone_tags)  # Placeholder scores
-                                formatted_pinecone_tags = format_predicted_tags(pinecone_tags, real_tags, pinecone_scores)
+                                # formatted_pinecone_tags = format_predicted_tags(pinecone_tags, real_tags, pinecone_scores)
+                                formatted_pinecone_tags = format_pinecone_tags(pinecone_tags, real_tags)
                                 st.markdown(f"**Etiquetas Pinecone:** {formatted_pinecone_tags}", unsafe_allow_html=True)
 
                                 # Etiquetas sustantivas
