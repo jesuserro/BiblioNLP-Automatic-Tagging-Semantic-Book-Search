@@ -16,8 +16,19 @@ from pinecone import Pinecone, ServerlessSpec, exceptions
 from spacy.lang.en.stop_words import STOP_WORDS as STOP_WORDS_EN
 from spacy.lang.es.stop_words import STOP_WORDS as STOP_WORDS_ES
 import re
+import configparser
+import os
 
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
+
+# Leer configuración desde config.cfg
+config = configparser.ConfigParser()
+config_path = os.path.join(os.path.dirname(__file__), "../config.cfg")  # Ruta relativa al archivo config.cfg
+config.read(config_path)
+
+# Verificar si el archivo de configuración se cargó correctamente
+if "pinecone" not in config:
+    raise ValueError("No se encontró la sección [pinecone] en el archivo config.cfg")
 
 # st.write(f"Python executable: {sys.executable}")
 # st.write(f"Python version: {sys.version}")
@@ -45,14 +56,12 @@ DEFAULT_BOOK_BLURB = (
     "“Even though each of these letters of condolence is personalized with intimate detail, together they hammer home Rilke’s remarkable truth about the death of another: that the pain of it can force us into a ‘deeper . . . level of life’ and render us more ‘vibrant.’ Here we have a great poet’s reflections on our greatest mystery.”—Billy Collins\n\n"
     "“As we live our lives, it is possible to feel not sadness or melancholy but a rush of power as the life of others passes into us. This rhapsodic volume teaches us that death is not a negation but a deepening experience in the onslaught of existence. What a wise and victorious book!”—Henri Cole"
 )
-DEFAULT_BOOK_TITLE_2 = "Messi: Edición revisada y actualizada (Biografías y memorias)"
+DEFAULT_BOOK_TITLE_2 = "The Flea: The Amazing Story of Leo Messi"
 DEFAULT_BOOK_BLURB_2 = (
-    "Leo Messi es el jugador de fútbol más conocido del planeta, pero también un enigma como persona, por su hermetismo. Esta biografía, que fue publicada por primera vez en 2014, y posteriormente actualizada en 2018, se presenta de nuevo en una edición que recoge lo más relevante de los últimos años del jugador en el Fútbol Club Barcelona. \n\n"
-    "En esta nueva edición, el autor repasa lo más destacado desde aquel fatídico Mundial de Brasil hasta el final de la temporada 2017/18, así como su paso por el Mundial de Rusia y por la Copa América 2021, que coincidía con el momento en que expiraba su contrato con el Fútbol Club Barcelona, y que convirtió al astro argentino en foco de todas las miradas, generando una enorme expectación.\n\n"
-    "En agosto de 2021, se anunció el desenlace que parecía imposible: Messi no pudo renovar en el Barça y se anunció su fichaje por el PSG. ¿Qué pasó? ¿Cómo es posible que, queriendo quedarse, tuviera que salir?"
+    "The captivating story of soccer legend Lionel Messi, from his first touch at age five in the streets of Rosario, Argentina, to his first goal on the Camp Nou pitch in Barcelona, Spain. The Flea tells the amazing story of a boy who was born to play the beautiful game and destined to become the world's greatest soccer player."
 )
 DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
-TAGS_INPUT_2       = "deportes, fútbol, messi"
+TAGS_INPUT_2       = "sports, sport"
 
 st.title("BiblioNLP - Predicción automática de etiquetas")
 st.markdown(
@@ -81,7 +90,7 @@ def analyze_sentiments(text):
 
 # Función para generar gráfica de sentimientos
 def plot_sentiments(sentiments):
-    fig, ax = plt.subplots(figsize=(4, 2))
+    fig, ax = plt.subplots(figsize=(6, 4))
     ax.bar(sentiments.keys(), sentiments.values(), color="skyblue")
     ax.set_title("Análisis de Sentimientos")
     ax.set_ylabel("Puntuación")
@@ -105,8 +114,8 @@ def format_predicted_tags(predicted_tags, real_tags, scores):
 
 # Pinecone: Cargar modelo de spaCy para sustantivos
 # Inicializar Pinecone
-PINECONE_API_KEY = "pcsk_3NHcD2_85bKajTDUbSE838cvf95Yks2StS6UxLXyPYjLJ9Twsi24h43bNCdxKQ3y5ArQYi"  # Reemplaza con tu API Key de Pinecone
-PINECONE_ENV = "us-east-1"  # Reemplaza con tu entorno de Pinecone
+PINECONE_API_KEY = config["pinecone"]["api_key"]
+PINECONE_ENV = config["pinecone"]["environment"]
 INDEX_NAME = "book-embeddings"  # Nombre del índice usado en el notebook
 
 # Inicializar Pinecone usando la nueva API
@@ -116,13 +125,13 @@ try:
         # Crear el índice si no existe
         pc.create_index(
             name=INDEX_NAME,
-            dimension=768,  # Cambia esto según las dimensiones de tus embeddings
+            dimension=384,  # Cambia esto según las dimensiones de tus embeddings
             metric="cosine",
             spec=ServerlessSpec(cloud="aws", region=PINECONE_ENV)
         )
-        st.info("Índice creado correctamente.")
+        st.info("Índice Pinecone creado correctamente.")
     else:
-        st.info("Índice ya existente. Conectando...")
+        st.info("Índice Pinecone existente. Conectando...")
 
     # Obtener el índice
     index = pc.Index(INDEX_NAME)
@@ -136,7 +145,8 @@ except Exception as e:
 # Función para predecir etiquetas fusionadas (Logistic Regression + Pinecone + Nouns)
 # Cargar modelo de spaCy
 try:
-    nlp = spacy.load("es_core_news_sm")
+    # nlp = spacy.load("es_core_news_sm")
+    nlp = spacy.load("en_core_web_sm")
 except OSError:
     import subprocess
     subprocess.run(["python", "-m", "spacy", "download", "es_core_news_sm"])

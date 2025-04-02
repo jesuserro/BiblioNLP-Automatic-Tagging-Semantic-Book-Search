@@ -57,6 +57,10 @@ python3 -m venv venv
 source venv/bin/activate
 
 pip install -r requirements.txt
+
+/usr/bin/python3 -m pip install pinecone
+/usr/bin/python3 -m spacy download en_core_web_sm
+/usr/bin/python3 -m spacy download es_core_news_sm
 ```
 
 ### 3. Configura Variables de Entorno
