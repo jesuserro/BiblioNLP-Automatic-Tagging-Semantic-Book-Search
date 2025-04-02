@@ -78,6 +78,20 @@ def plot_sentiments(sentiments):
     plt.tight_layout()
     return fig
 
+# Función para colorear tags predichos
+def format_predicted_tags(predicted_tags, real_tags, scores):
+    formatted_tags = []
+    for tag, score in zip(predicted_tags, scores):
+        if tag in real_tags:
+            # Verde para coincidencias
+            formatted_tags.append(f'<span style="color:green">{tag}</span>')
+        else:
+            # Gradación de color basada en el score
+            red_intensity = int((1 - score) * 255)
+            green_intensity = int(score * 255)
+            formatted_tags.append(f'<span style="color:rgb({red_intensity},{green_intensity},0)">{tag}</span>')
+    return ", ".join(formatted_tags)
+
 # Crear pestañas
 tab1, tab2 = st.tabs(["Predicción de etiquetas", "Recomendaciones"])
 
@@ -189,7 +203,19 @@ with tab2:
                             col1, col2 = st.columns([2, 1])
                             with col1:
                                 st.markdown(f"### 📖 {row['book_title']}")
-                                st.markdown(f"**Etiquetas:** `{row['tags']}`")
+                                st.markdown(f"**Etiquetas reales:** {row['tags']}")
+
+                                # Predicción de etiquetas
+                                text = row["blurb"]
+                                X_test = embedding_model.encode([text])
+                                preds_proba = np.array([proba[:, 1] for proba in clf.predict_proba(X_test)]).T
+                                preds = (preds_proba >= 0.3).astype(int)
+                                predicted_tags = mlb.inverse_transform(preds)[0]
+                                scores = preds_proba[0]
+
+                                # Formatear etiquetas predichas
+                                formatted_tags = format_predicted_tags(predicted_tags, row["tags"].split(", "), scores)
+                                st.markdown(f"**Etiquetas predichas:** {formatted_tags}", unsafe_allow_html=True)
                             with col2:
                                 sentiments = analyze_sentiments(row["blurb"])
                                 fig = plot_sentiments(sentiments)
