@@ -15,10 +15,10 @@ MLB_MODEL_URL            = "model/book_tagging_pipeline_mlb.joblib"
 CLUSTERING_MODEL_URL     = "model/book_clustering_kmeans.joblib"
 RECOMMENDATION_MODEL_URL = "model/book_recommendation_by_tags.joblib"
 # Cargar el modelo de sentimientos
-SENTIMENT_MODEL_PATH = "model/sentiment_roberta_model.joblib"
+SENTIMENT_MODEL_PATH     = "model/sentiment_roberta_model.joblib"
 SENTIMENT_TOKENIZER_PATH = "model/sentiment_roberta_tokenizer.joblib"
-sentiment_model = joblib.load(SENTIMENT_MODEL_PATH)
-sentiment_tokenizer = joblib.load(SENTIMENT_TOKENIZER_PATH)
+sentiment_model          = joblib.load(SENTIMENT_MODEL_PATH)
+sentiment_tokenizer      = joblib.load(SENTIMENT_TOKENIZER_PATH)
 
 # Constantes para valores por defecto
 DEFAULT_BOOK_TITLE = "The Dark Interval: Letters on Loss, Grief, and Transformation"
@@ -39,6 +39,7 @@ DEFAULT_BOOK_BLURB_2 = (
     "En agosto de 2021, se anunció el desenlace que parecía imposible: Messi no pudo renovar en el Barça y se anunció su fichaje por el PSG. ¿Qué pasó? ¿Cómo es posible que, queriendo quedarse, tuviera que salir?"
 )
 DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
+TAGS_INPUT_2       = "deportes, fútbol, messi"
 
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
 
@@ -145,7 +146,7 @@ with tab2:
             tags_input = st.text_input(
                 f"Introduce etiquetas separadas por comas (Set {i + 1})",
                 key=f"tags_input_{i}",
-                value=DEFAULT_TAGS_INPUT if i == 0 else "deportes, fútbol, messi"
+                value=DEFAULT_TAGS_INPUT if i == 0 else TAGS_INPUT_2
             )
             tags_inputs.append(tags_input)
 
