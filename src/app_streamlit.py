@@ -19,7 +19,7 @@ import re
 import configparser
 import os
 
-st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚")
+st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚", layout="wide")
 
 # Leer configuración desde config.cfg
 config = configparser.ConfigParser()
@@ -61,7 +61,7 @@ DEFAULT_BOOK_BLURB_2 = (
     "The captivating story of soccer legend Lionel Messi, from his first touch at age five in the streets of Rosario, Argentina, to his first goal on the Camp Nou pitch in Barcelona, Spain. The Flea tells the amazing story of a boy who was born to play the beautiful game and destined to become the world's greatest soccer player."
 )
 DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
-TAGS_INPUT_2       = "sports, sport"
+TAGS_INPUT_2       = "sport, football, messi, soccer"
 
 st.title("BiblioNLP - Predicción automática de etiquetas")
 st.markdown(
@@ -90,11 +90,39 @@ def analyze_sentiments(text):
 
 # Función para generar gráfica de sentimientos
 def plot_sentiments(sentiments):
+    # Definir colores para los sentimientos
+    sentiment_colors = { 
+        "anger": "#b71c1c", # Rojo muy oscuro (máx. negatividad) 
+        "disgust": "#d32f2f", # Rojo oscuro 
+        "fear": "#ef5350", # Rojo algo más claro 
+        "sadness": "#ffcdd2", # Tono salmón muy claro 
+        "neutral": "#f0f0f0", # Gris muy claro (punto de transición) 
+        "surprise": "#ffe082", # Amarillo pastel 
+        "joy": "#ffd600" # Amarillo vivo (máx. positividad) 
+    }
+
+    # Ordenar los sentimientos de negativos a positivos
+    ordered_labels = ["anger", "disgust", "fear", "sadness", "neutral", "surprise", "joy"]
+    ordered_sentiments = {label: sentiments[label] for label in ordered_labels}
+
+    # Crear la figura con mayor altura
     fig, ax = plt.subplots(figsize=(6, 4))
-    ax.bar(sentiments.keys(), sentiments.values(), color="skyblue")
-    ax.set_title("Análisis de Sentimientos")
-    ax.set_ylabel("Puntuación")
-    ax.set_xticklabels(sentiments.keys(), rotation=45)
+    
+    # Asignar colores a las barras según el sentimiento
+    colors = [sentiment_colors[label] for label in ordered_sentiments.keys()]
+    
+    # Crear el gráfico de barras
+    ax.bar(ordered_sentiments.keys(), ordered_sentiments.values(), color=colors)
+    
+    # Configurar el título y etiquetas
+    ax.set_title("Análisis de Sentimientos", fontsize=16)
+    ax.set_ylabel("Puntuación", fontsize=16)
+    ax.set_xlabel("Sentimientos", fontsize=16)
+    
+    # Aumentar el tamaño de los labels del eje X
+    ax.set_xticklabels(ordered_sentiments.keys(), rotation=45, fontsize=12)
+    
+    # Ajustar el diseño
     plt.tight_layout()
     return fig
 
