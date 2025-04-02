@@ -128,20 +128,22 @@ with tab2:
         if any(tags.strip() == "" for tags in tags_inputs):
             st.warning("Por favor, introduce al menos una etiqueta en cada set.")
         else:
-            recommendation_model = joblib.load(RECOMMENDATION_MODEL_URL)
-            books_df = pd.read_csv("data/processed/books.csv")
-            book_embeddings = recommendation_model.encode(books_df["blurb"].tolist())
+            with st.spinner("Procesando recomendaciones..."):
+                recommendation_model = joblib.load(RECOMMENDATION_MODEL_URL)
+                books_df = pd.read_csv("data/processed/books.csv")
+                book_embeddings = recommendation_model.encode(books_df["blurb"].tolist())
 
-            st.success("Resultados:")
-            for i, tags_input in enumerate(tags_inputs):
-                input_tags = [tag.strip() for tag in tags_input.split(",")]
+                st.success("Resultados:")
+                for i, tags_input in enumerate(tags_inputs):
+                    input_tags = [tag.strip() for tag in tags_input.split(",")]
 
-                with st.spinner(f"Buscando libros para el Set {i + 1}..."):
+                    # Crear el progress bar dentro del procesamiento
                     progress_bar = st.progress(0)
 
                     tags_text = ", ".join(input_tags)
                     tags_embedding = recommendation_model.encode([tags_text])
 
+                    # Actualizar el progreso
                     for j in range(50):
                         time.sleep(0.01)
                         progress_bar.progress(int((j + 1) * 100 / 50))
@@ -150,18 +152,18 @@ with tab2:
                     top_indices = similarities.argsort()[-num_recommendations:][::-1]
                     recommended_books = books_df.iloc[top_indices][["book_title", "tags"]]
 
-                if recommended_books.empty:
-                    st.warning(f"No se encontraron libros recomendados para el Set {i + 1}.")
-                else:
-                    st.markdown(f"## Recomendaciones para el Set {i + 1}:")
-                    for _, row in recommended_books.iterrows():
-                        st.markdown(
-                            f"""
-                            <div style="border: 1px solid #444; border-radius: 8px; padding: 10px; margin-bottom: 15px; background-color: #1e1e1e;">
-                                <h4 style="color: #f1f1f1; margin-bottom: 5px;">📖 {row['book_title']}</h4>
-                                <p style="margin: 0; color: #cccccc;"><strong>Etiquetas:</strong> 
-                                <span style="color: #00aced;">{', '.join(row['tags'].split(', '))}</span></p>
-                            </div>
-                            """,
-                            unsafe_allow_html=True,
-                        )
+                    if recommended_books.empty:
+                        st.warning(f"No se encontraron libros recomendados para el Set {i + 1}.")
+                    else:
+                        st.markdown(f"## Recomendaciones para el Set {i + 1}:")
+                        for _, row in recommended_books.iterrows():
+                            st.markdown(
+                                f"""
+                                <div style="border: 1px solid #444; border-radius: 8px; padding: 10px; margin-bottom: 15px; background-color: #1e1e1e;">
+                                    <h4 style="color: #f1f1f1; margin-bottom: 5px;">📖 {row['book_title']}</h4>
+                                    <p style="margin: 0; color: #cccccc;"><strong>Etiquetas:</strong> 
+                                    <span style="color: #00aced;">{', '.join(row['tags'].split(', '))}</span></p>
+                                </div>
+                                """,
+                                unsafe_allow_html=True,
+                            )
