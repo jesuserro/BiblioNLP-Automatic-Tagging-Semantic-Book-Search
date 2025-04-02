@@ -61,7 +61,7 @@ DEFAULT_BOOK_BLURB_2 = (
     "The captivating story of soccer legend Lionel Messi, from his first touch at age five in the streets of Rosario, Argentina, to his first goal on the Camp Nou pitch in Barcelona, Spain. The Flea tells the amazing story of a boy who was born to play the beautiful game and destined to become the world's greatest soccer player."
 )
 DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
-TAGS_INPUT_2       = "sport, football, messi, soccer"
+TAGS_INPUT_2       = "messi, biography"
 
 st.title("BiblioNLP - Predicción automática de etiquetas")
 st.markdown(
@@ -125,6 +125,18 @@ def plot_sentiments(sentiments):
     # Ajustar el diseño
     plt.tight_layout()
     return fig
+
+# Función para colorear etiquetas reales
+def format_real_tags(real_tags, predicted_tags):
+    formatted_tags = []
+    for tag in real_tags:
+        if tag in predicted_tags:
+            # Verde para indicar coincidencia con las etiquetas predichas
+            formatted_tags.append(f'<span style="color:rgb(160, 245, 192)">{tag}</span>')
+        else:
+            # Color normal para las etiquetas que no coinciden
+            formatted_tags.append(f'<span>{tag}</span>')
+    return ", ".join(formatted_tags)
 
 # Función para colorear tags predichos
 def format_predicted_tags(predicted_tags, real_tags, scores):
@@ -354,7 +366,6 @@ with tab2:
                             col1, col2 = st.columns([2, 1])
                             with col1:
                                 st.markdown(f"### 📖 {row['book_title']}")
-                                st.markdown(f"**Etiquetas reales:** {row['tags']}")
 
                                 # Predicción de etiquetas
                                 text = row["blurb"]
@@ -364,15 +375,20 @@ with tab2:
                                 predicted_tags = mlb.inverse_transform(preds)[0]
                                 scores = preds_proba[0]
 
+                                # Etiquetas reales con coincidencias resaltadas
+                                real_tags = row["tags"].split(", ")
+                                formatted_real_tags = format_real_tags(real_tags, predicted_tags)
+                                st.markdown(f"**Etiquetas reales:** {formatted_real_tags}", unsafe_allow_html=True)
+
                                 # Formatear etiquetas predichas
-                                formatted_tags = format_predicted_tags(predicted_tags, row["tags"].split(", "), scores)
+                                formatted_tags = format_predicted_tags(predicted_tags, real_tags, scores)
                                 st.markdown(f"**Etiquetas predichas:** {formatted_tags}", unsafe_allow_html=True)
 
                                 # Predicción de etiquetas Pinecone
                                 ensemble_result = predict_with_ensemble(row["book_title"], row["blurb"])
                                 pinecone_tags = ensemble_result["tags_fusion"]
                                 pinecone_scores = [0.5] * len(pinecone_tags)  # Placeholder scores
-                                formatted_pinecone_tags = format_predicted_tags(pinecone_tags, row["tags"].split(", "), pinecone_scores)
+                                formatted_pinecone_tags = format_predicted_tags(pinecone_tags, real_tags, pinecone_scores)
                                 st.markdown(f"**Etiquetas Pinecone:** {formatted_pinecone_tags}", unsafe_allow_html=True)
                             with col2:
                                 sentiments = analyze_sentiments(row["blurb"])
