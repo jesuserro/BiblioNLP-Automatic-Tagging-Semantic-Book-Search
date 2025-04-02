@@ -5,12 +5,20 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import time
+import matplotlib.pyplot as plt
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
 
 # Constantes para las URLs de los modelos
 TAGGING_MODEL_URL        = "model/book_tagging_pipeline.joblib"
 MLB_MODEL_URL            = "model/book_tagging_pipeline_mlb.joblib"
 CLUSTERING_MODEL_URL     = "model/book_clustering_kmeans.joblib"
 RECOMMENDATION_MODEL_URL = "model/book_recommendation_by_tags.joblib"
+# Cargar el modelo de sentimientos
+SENTIMENT_MODEL_PATH = "model/sentiment_roberta_model.joblib"
+SENTIMENT_TOKENIZER_PATH = "model/sentiment_roberta_tokenizer.joblib"
+sentiment_model = joblib.load(SENTIMENT_MODEL_PATH)
+sentiment_tokenizer = joblib.load(SENTIMENT_TOKENIZER_PATH)
 
 # Constantes para valores por defecto
 DEFAULT_BOOK_TITLE = "The Dark Interval: Letters on Loss, Grief, and Transformation"
@@ -48,6 +56,26 @@ def load_models():
     return clf, mlb, model
 
 clf, mlb, embedding_model = load_models()
+
+# Función para calcular sentimientos
+def analyze_sentiments(text):
+    max_len = 512
+    encoded = sentiment_tokenizer(text, return_tensors="pt", max_length=max_len, truncation=True, padding="max_length")
+    with torch.no_grad():
+        output = sentiment_model(**encoded)
+    scores = torch.softmax(output.logits, dim=1).squeeze().numpy()
+    labels = ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
+    return dict(zip(labels, scores))
+
+# Función para generar gráfica de sentimientos
+def plot_sentiments(sentiments):
+    fig, ax = plt.subplots(figsize=(4, 2))
+    ax.bar(sentiments.keys(), sentiments.values(), color="skyblue")
+    ax.set_title("Análisis de Sentimientos")
+    ax.set_ylabel("Puntuación")
+    ax.set_xticklabels(sentiments.keys(), rotation=45)
+    plt.tight_layout()
+    return fig
 
 # Crear pestañas
 tab1, tab2 = st.tabs(["Predicción de etiquetas", "Recomendaciones"])
@@ -150,20 +178,18 @@ with tab2:
 
                     similarities = cosine_similarity(tags_embedding, book_embeddings).flatten()
                     top_indices = similarities.argsort()[-num_recommendations:][::-1]
-                    recommended_books = books_df.iloc[top_indices][["book_title", "tags"]]
+                    recommended_books = books_df.iloc[top_indices][["book_title", "blurb", "tags"]]
 
                     if recommended_books.empty:
                         st.warning(f"No se encontraron libros recomendados para el Set {i + 1}.")
                     else:
                         st.markdown(f"## Recomendaciones para el Set {i + 1}:")
                         for _, row in recommended_books.iterrows():
-                            st.markdown(
-                                f"""
-                                <div style="border: 1px solid #444; border-radius: 8px; padding: 10px; margin-bottom: 15px; background-color: #1e1e1e;">
-                                    <h4 style="color: #f1f1f1; margin-bottom: 5px;">📖 {row['book_title']}</h4>
-                                    <p style="margin: 0; color: #cccccc;"><strong>Etiquetas:</strong> 
-                                    <span style="color: #00aced;">{', '.join(row['tags'].split(', '))}</span></p>
-                                </div>
-                                """,
-                                unsafe_allow_html=True,
-                            )
+                            col1, col2 = st.columns([2, 1])
+                            with col1:
+                                st.markdown(f"### 📖 {row['book_title']}")
+                                st.markdown(f"**Etiquetas:** `{row['tags']}`")
+                            with col2:
+                                sentiments = analyze_sentiments(row["blurb"])
+                                fig = plot_sentiments(sentiments)
+                                st.pyplot(fig)
