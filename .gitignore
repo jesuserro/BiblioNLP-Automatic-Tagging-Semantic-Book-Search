@@ -29,3 +29,5 @@ model/cv_fold_5
 
 data/raw/goodreads_data.csv
 model/vectors.npy
+
+model/sentiment_roberta_model.joblib
