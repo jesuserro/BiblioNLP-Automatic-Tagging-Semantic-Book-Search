@@ -278,7 +278,63 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
     }
 
 # Crear pestañas
-tab1, tab2 = st.tabs(["Tag Generator", "Book Recommender"])
+tab0, tab1, tab2, tab3 = st.tabs(["Overview", "Tag Generator", "Book Recommender", "To-Do List"])
+
+# === TAB 0 ===
+with tab0:
+    st.title("Overview")
+    st.markdown("### How the Application Works")
+    st.markdown("""
+    This application is designed to predict tags for books and recommend similar books based on their descriptions. 
+    It uses machine learning models and embeddings to process the input data and generate meaningful results.
+    """)
+
+    st.markdown("### Data Sources")
+    st.markdown("""
+    - **Processed Books Dataset**: `data/processed/books.csv`  
+      Contains book titles, blurbs, and tags.  
+      **Shape**: `pd.read_csv('data/processed/books.csv').shape`
+    - **Clustering Dataset**: `data/processed/clustering_books.csv`  
+      Contains book titles and their assigned clusters.  
+      **Shape**: `pd.read_csv('data/processed/clustering_books.csv').shape`
+    - **Raw Goodreads Dataset**: `data/raw/goodreads_data.csv`  
+      Contains raw book data including genres and descriptions.  
+      **Shape**: `pd.read_csv('data/raw/goodreads_data.csv').shape`
+    """)
+
+    st.markdown("### Models Used")
+    st.markdown("""
+    - **Logistic Regression**: Used for tag prediction.  
+    - **SentenceTransformer**: Embedding model (`paraphrase-multilingual-MiniLM-L12-v2`) for semantic similarity.  
+    - **KMeans Clustering**: Groups books into clusters based on their embeddings.  
+    - **Pinecone**: Retrieves similar books using vector search.  
+    - **Sentiment Analysis**: RoBERTa-based model for analyzing the sentiment of book blurbs.
+    """)
+
+    st.markdown("### Data Transformation Processes")
+    st.markdown("""
+    - **Text Embedding**: Converts book titles and blurbs into numerical vectors using SentenceTransformer.  
+    - **Tag Prediction**: Logistic regression predicts tags based on embeddings.  
+    - **Clustering**: Groups books into clusters for similarity-based recommendations.  
+    - **Pinecone Integration**: Retrieves top-K similar books using cosine similarity.  
+    - **Noun Extraction**: Extracts relevant nouns from text using spaCy for additional tag enrichment.
+    """)
+
+    st.markdown("### Visualizations")
+    st.markdown("Below are some visualizations of the data and model performance:")
+
+    # Example visualization: Distribution of clusters
+    clustering_books_df = pd.read_csv("data/processed/clustering_books.csv")
+    cluster_counts = clustering_books_df["cluster"].value_counts()
+    fig, ax = plt.subplots()
+    ax.bar(cluster_counts.index, cluster_counts.values, color="skyblue")
+    ax.set_title("Distribution of Clusters")
+    ax.set_xlabel("Cluster")
+    ax.set_ylabel("Number of Books")
+    st.pyplot(fig)
+
+    # Example image from the root directory
+    # st.image("img/overview_diagram.png", caption="System Overview", use_column_width=True)
 
 # === TAB 1 ===
 with tab1:
@@ -435,3 +491,28 @@ with tab2:
                                 sentiments = analyze_sentiments(row["blurb"])
                                 fig = plot_sentiments(sentiments)
                                 st.pyplot(fig)
+
+# === TAB 3 ===
+with tab3:
+    st.title("To-Do List")
+    st.markdown("""
+    ### Future Improvements
+    - **Model Enhancements**:  
+      - Fine-tune the logistic regression model for better tag prediction accuracy.  
+      - Experiment with other embedding models like `all-MiniLM-L6-v2` for improved semantic understanding.
+    - **Data Augmentation**:  
+      - Add more diverse datasets to improve model generalization.  
+      - Include multilingual datasets for better language support.
+    - **UI/UX Improvements**:  
+      - Add more interactive visualizations.  
+      - Allow users to upload custom datasets for predictions.
+    - **Performance Optimization**:  
+      - Optimize Pinecone queries for faster recommendations.  
+      - Reduce memory usage by batching large datasets.
+    - **Additional Features**:  
+      - Add a "Download Results" button for exporting predictions and recommendations.  
+      - Implement a feedback loop to improve model predictions based on user input.
+    """)
+
+    # Example image for the To-Do List
+    # st.image("img/todo_list.png", caption="Future Improvements", use_column_width=True)
