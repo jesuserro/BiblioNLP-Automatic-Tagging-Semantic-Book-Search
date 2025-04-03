@@ -277,45 +277,35 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
 tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Predictor", "Book Recommender", "To-Do List"])
 
 # === TAB StoryTelling ===
-# === TAB StoryTelling ===
 with tab_story:
     st.title("StoryTelling")
     
-    # Dividir en dos columnas
-    col1, col2 = st.columns([2, 1])  # Columna izquierda más ancha para textos
+    col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown("### The Motivation Behind the Project")
+        st.markdown("### Motivation")
+        st.markdown("Books inspire, educate, and transform lives. Finding the right book shouldn't be overwhelming.")
+
+        st.markdown("### Problem")
         st.markdown("""
-        Books have always been a gateway to knowledge, imagination, and personal growth. However, in a world where millions of books are published every year, finding the right book can feel overwhelming.  
-        This project was born out of a love for literature and a desire to make the process of discovering books more intuitive and meaningful.  
+        - Too many choices.  
+        - Poor personalization.  
+        - Incomplete metadata.  
         """)
 
-        st.markdown("### The Problem We Aim to Solve")
-        st.markdown("""
-        - **Overwhelming Choices**: With so many books available, readers often struggle to find books that truly resonate with their interests.  
-        - **Lack of Personalization**: Traditional recommendation systems often fail to capture the nuanced preferences of readers.  
-        - **Disconnected Metadata**: Many books lack proper tagging, making it difficult to categorize and recommend them effectively.  
-        """)
+        st.markdown("### Vision")
+        st.markdown("Bridge readers and books using AI for seamless, personalized discovery.")
 
-        st.markdown("### Our Vision")
+        st.markdown("### Why It Matters")
         st.markdown("""
-        Imagine a world where every reader can effortlessly discover books that inspire, educate, and entertain them.  
-        Our goal is to bridge the gap between readers and books by leveraging the power of machine learning and natural language processing to create a seamless and personalized book discovery experience.  
-        """)
-
-        st.markdown("### Why This Matters")
-        st.markdown("""
-        Books have the power to change lives. By helping readers find the right books, we can:  
-        - Foster a deeper love for reading.  
-        - Encourage lifelong learning.  
-        - Connect people with stories and ideas that resonate with their unique journeys.  
+        - Foster love for reading.  
+        - Promote lifelong learning.  
+        - Connect people with impactful stories.  
         """)
 
     with col2:
-        # Espacio reservado para imágenes o gráficas
         st.image("img/tag_wordcloud.jpg", caption="Our Vision", use_container_width=True)
-        # st.image("docs/img/storytelling-problem.jpg", caption="The Problem We Aim to Solve", use_container_width=True)
+
 
 # === TAB 0 ===
 with tab0:
@@ -563,51 +553,43 @@ with tab2:
 with tab3:
     st.title("📝 To-Do List")
     
-    # Dividir en dos columnas
-    col1, col2 = st.columns([2, 1])  # Columna izquierda más ancha para textos
+    col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown("## 🧠 **1. Model Enhancements**")
+        st.markdown("## 🧠 Model Enhancements")
         st.markdown("""
-        - 🧪 **Fine-tune the Logistic Regression model** for better tag prediction accuracy.  
-        - 🔍 **Experiment with other embedding models** like `all-MiniLM-L6-v2` for improved semantic understanding.  
-          > 🧬 384 dims (`paraphrase-multilingual-MiniLM-L12-v2`) vs 768 (`all-MiniLM-L6-v2`)  
-        - 🌲⚡ **Try Random Forest and XGBoost** for potentially better performance.
+        - Fine-tune Logistic Regression.  
+        - Test advanced embeddings.  
+        - Explore Random Forest/XGBoost.  
         """)
 
-        st.markdown("## 🧩 **2. Data Augmentation**")
+        st.markdown("## 🧩 Data Augmentation")
         st.markdown("""
-        - 🌍 **Add more diverse datasets** to improve model generalization.  
-        - 🈳 **Include multilingual datasets** for better language support.  
-        - ✂️🗣️ **Implement language segmentation** to achieve more accurate results.
+        - Add diverse datasets.  
+        - Include multilingual data.  
+        - Segment languages.  
         """)
 
-        st.markdown("## ⚙️ **3. Performance Optimization**")
+        st.markdown("## ⚙️ Performance")
         st.markdown("""
-        - 🚀 **Optimize Pinecone queries** for faster recommendations.  
-        - 🧠💾 **Reduce memory usage** by batching large datasets.
+        - Optimize Pinecone queries.  
+        - Reduce memory usage.  
         """)
 
-        st.markdown("## 🧰 **4. Additional Features**")
+        st.markdown("## 🧰 Features")
         st.markdown("""
-        - 🔁 **Airflow pipelines** for data ingestion and model training.  
-        - 📊 **Grafana dashboards** for monitoring model performance.  
-        - 📈 **Power BI dashboards** for storytelling and visualizing data insights.  
-        - 🔗 **Integrate with other APIs** for enhanced recommendations.  
-        - 📥 **Add a "Download Results" button** for exporting predictions and recommendations.  
-        - 🔄 **Implement a feedback loop** to continuously improve model predictions based on user input.
+        - Add Airflow pipelines.  
+        - Create dashboards (Grafana/Power BI).  
+        - Enable result downloads.  
+        - Implement feedback loop.  
         """)
 
-        st.markdown("## 🎨 **5. UI/UX Improvements**")
+        st.markdown("## 🎨 UI/UX")
         st.markdown("""
-        - 📉 **Add interactive visualizations** to help users interpret results more intuitively.  
-        - 📂 **Allow users to upload custom datasets** for predictions.
+        - Add interactive visuals.  
+        - Allow custom dataset uploads.  
         """)
 
     with col2:
-        # Mostrar imágenes alineadas verticalmente
         st.image("docs/img/model-enhancements.jpg", caption="Model Enhancements", use_container_width=True)
         st.image("docs/img/data-augmentation.jpg", caption="Data Augmentation", use_container_width=True)
-        st.image("https://via.placeholder.com/800x300?text=Performance+Optimization", caption="Performance Optimization", use_container_width=True)
-        st.image("https://via.placeholder.com/800x300?text=Additional+Features", caption="Additional Features", use_container_width=True)
-        st.image("https://via.placeholder.com/800x300?text=UI%2FUX+Improvements", caption="UI/UX Improvements", use_container_width=True)
