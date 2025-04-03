@@ -323,11 +323,9 @@ with tab0:
     with col1:
         st.markdown("### 🚀 How It Works")
         st.markdown("""
-        - **📚 My Data**: Logistic Regression trained on my personal Goodreads-tagged books.  
-        - **🌐 Pinecone Tags**: Logistic Regression trained on a Kaggle Goodreads dataset.  
+        - **📚 My Logistic Regression Model**: Trained on my personal Goodreads-tagged books.  
+        - **🌐 External Logistic Regression Model**: Trained on a Kaggle Goodreads dataset.  
         - **🔗 Fusion**: Combines tags from both models + noun extraction for enriched results.
-        - **🔍 Clustering**: KMeans clustering for semantic similarity.
-        - **📖 Recommendations**: Book recommendations based on user-defined tags.  
         """)
 
         st.markdown("### 📂 Data Sources")
@@ -339,6 +337,15 @@ with tab0:
         # Mostrar shapes dinámicamente
         st.markdown(f"- **My Books**: {books_df.shape[0]} rows, {books_df.shape[1]} columns.")
         st.markdown(f"- **Kaggle Dataset**: {goodreads_df.shape[0]} rows, {goodreads_df.shape[1]} columns.")
+
+        # Nueva sección: Mejoras de Tags
+        st.markdown("### 🛠️ Tagging Enhancements")
+        st.markdown("""
+        - **🔍 Clustering**: Group books based on semantic similarity for better organization.  
+        - **📖 Recommendations**: Suggest books based on user-defined tags and preferences.  
+        - **🔗 Fusion**: Combine tags from multiple models and noun extraction for enriched results.  
+        - **🎭 Sentiments**: Analyze the emotional tone of book descriptions to add depth to tags.  
+        """)
 
     with col2:
         st.markdown("### 📈 Visual Insights")
