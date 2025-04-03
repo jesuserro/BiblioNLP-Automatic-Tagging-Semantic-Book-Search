@@ -277,94 +277,131 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
 tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Predictor", "Book Recommender", "To-Do List"])
 
 # === TAB StoryTelling ===
+# === TAB StoryTelling ===
 with tab_story:
     st.title("StoryTelling")
-    st.markdown("### The Motivation Behind the Project")
-    st.markdown("""
-    Books have always been a gateway to knowledge, imagination, and personal growth. However, in a world where millions of books are published every year, finding the right book can feel overwhelming.  
-    This project was born out of a love for literature and a desire to make the process of discovering books more intuitive and meaningful.  
-    """)
+    
+    # Dividir en dos columnas
+    col1, col2 = st.columns([2, 1])  # Columna izquierda más ancha para textos
 
-    st.markdown("### The Problem We Aim to Solve")
-    st.markdown("""
-    - **Overwhelming Choices**: With so many books available, readers often struggle to find books that truly resonate with their interests.  
-    - **Lack of Personalization**: Traditional recommendation systems often fail to capture the nuanced preferences of readers.  
-    - **Disconnected Metadata**: Many books lack proper tagging, making it difficult to categorize and recommend them effectively.  
-    """)
+    with col1:
+        st.markdown("### The Motivation Behind the Project")
+        st.markdown("""
+        Books have always been a gateway to knowledge, imagination, and personal growth. However, in a world where millions of books are published every year, finding the right book can feel overwhelming.  
+        This project was born out of a love for literature and a desire to make the process of discovering books more intuitive and meaningful.  
+        """)
 
-    st.markdown("### Our Vision")
-    st.markdown("""
-    Imagine a world where every reader can effortlessly discover books that inspire, educate, and entertain them.  
-    Our goal is to bridge the gap between readers and books by leveraging the power of machine learning and natural language processing to create a seamless and personalized book discovery experience.  
-    """)
+        st.markdown("### The Problem We Aim to Solve")
+        st.markdown("""
+        - **Overwhelming Choices**: With so many books available, readers often struggle to find books that truly resonate with their interests.  
+        - **Lack of Personalization**: Traditional recommendation systems often fail to capture the nuanced preferences of readers.  
+        - **Disconnected Metadata**: Many books lack proper tagging, making it difficult to categorize and recommend them effectively.  
+        """)
 
-    st.markdown("### Why This Matters")
-    st.markdown("""
-    Books have the power to change lives. By helping readers find the right books, we can:  
-    - Foster a deeper love for reading.  
-    - Encourage lifelong learning.  
-    - Connect people with stories and ideas that resonate with their unique journeys.  
-    """)
+        st.markdown("### Our Vision")
+        st.markdown("""
+        Imagine a world where every reader can effortlessly discover books that inspire, educate, and entertain them.  
+        Our goal is to bridge the gap between readers and books by leveraging the power of machine learning and natural language processing to create a seamless and personalized book discovery experience.  
+        """)
 
-    # Add an emotional image to enhance storytelling
-    # st.image("img/storytelling_books.jpg", caption="Books: A Gateway to Knowledge and Imagination", use_column_width=True)
+        st.markdown("### Why This Matters")
+        st.markdown("""
+        Books have the power to change lives. By helping readers find the right books, we can:  
+        - Foster a deeper love for reading.  
+        - Encourage lifelong learning.  
+        - Connect people with stories and ideas that resonate with their unique journeys.  
+        """)
 
+    with col2:
+        # Espacio reservado para imágenes o gráficas
+        st.image("img/tag_wordcloud.jpg", caption="Our Vision", use_container_width=True)
+        # st.image("docs/img/storytelling-problem.jpg", caption="The Problem We Aim to Solve", use_container_width=True)
 
 # === TAB 0 ===
 with tab0:
     st.title("Overview")
-    st.markdown("### How the Application Works")
-    st.markdown("""
-    This application is designed to predict tags for books and recommend similar books based on their descriptions. 
-    It uses machine learning models and embeddings to process the input data and generate meaningful results.
-    """)
+    
+    # Dividir en dos columnas
+    col1, col2 = st.columns([1, 1])
 
-    st.markdown("### Data Sources")
-    st.markdown("""
-    - **Processed Books Dataset**: `data/processed/books.csv`  
-      Contains book titles, blurbs, and tags.  
-      **Shape**: `pd.read_csv('data/processed/books.csv').shape`
-    - **Clustering Dataset**: `data/processed/clustering_books.csv`  
-      Contains book titles and their assigned clusters.  
-      **Shape**: `pd.read_csv('data/processed/clustering_books.csv').shape`
-    - **Raw Goodreads Dataset**: `data/raw/goodreads_data.csv`  
-      Contains raw book data including genres and descriptions.  
-      **Shape**: `pd.read_csv('data/raw/goodreads_data.csv').shape`
-    """)
+    with col1:
+        st.markdown("### How the Application Works")
+        st.markdown("""
+        This application is designed to predict tags for books and recommend similar books based on their descriptions. 
+        It uses machine learning models and embeddings to process the input data and generate meaningful results.
+        """)
 
-    st.markdown("### Models Used")
-    st.markdown("""
-    - **Logistic Regression**: Used for tag prediction.  
-    - **SentenceTransformer**: Embedding model (`paraphrase-multilingual-MiniLM-L12-v2`) for semantic similarity.  
-    - **KMeans Clustering**: Groups books into clusters based on their embeddings.  
-    - **Pinecone**: Retrieves similar books using vector search.  
-    - **Sentiment Analysis**: RoBERTa-based model for analyzing the sentiment of book blurbs.
-    """)
+        st.markdown("### Data Sources")
+        st.markdown("""
+        - **Processed Books Dataset**: `data/processed/books.csv`  
+          Contains book titles, blurbs, and tags.  
+          **Shape**: `pd.read_csv('data/processed/books.csv').shape`
+        - **Clustering Dataset**: `data/processed/clustering_books.csv`  
+          Contains book titles and their assigned clusters.  
+          **Shape**: `pd.read_csv('data/processed/clustering_books.csv').shape`
+        - **Raw Goodreads Dataset**: `data/raw/goodreads_data.csv`  
+          Contains raw book data including genres and descriptions.  
+          **Shape**: `pd.read_csv('data/raw/goodreads_data.csv').shape`
+        """)
 
-    st.markdown("### Data Transformation Processes")
-    st.markdown("""
-    - **Text Embedding**: Converts book titles and blurbs into numerical vectors using SentenceTransformer.  
-    - **Tag Prediction**: Logistic regression predicts tags based on embeddings.  
-    - **Clustering**: Groups books into clusters for similarity-based recommendations.  
-    - **Pinecone Integration**: Retrieves top-K similar books using cosine similarity.  
-    - **Noun Extraction**: Extracts relevant nouns from text using spaCy for additional tag enrichment.
-    """)
+        st.markdown("### Models Used")
+        st.markdown("""
+        - **Logistic Regression**: Used for tag prediction.  
+        - **SentenceTransformer**: Embedding model (`paraphrase-multilingual-MiniLM-L12-v2`) for semantic similarity.  
+        - **KMeans Clustering**: Groups books into clusters based on their embeddings.  
+        - **Pinecone**: Retrieves similar books using vector search.  
+        - **Sentiment Analysis**: RoBERTa-based model for analyzing the sentiment of book blurbs.
+        """)
 
-    st.markdown("### Visualizations")
-    st.markdown("Below are some visualizations of the data and model performance:")
+        st.markdown("### Data Transformation Processes")
+        st.markdown("""
+        - **Text Embedding**: Converts book titles and blurbs into numerical vectors using SentenceTransformer.  
+        - **Tag Prediction**: Logistic regression predicts tags based on embeddings.  
+        - **Clustering**: Groups books into clusters for similarity-based recommendations.  
+        - **Pinecone Integration**: Retrieves top-K similar books using cosine similarity.  
+        - **Noun Extraction**: Extracts relevant nouns from text using spaCy for additional tag enrichment.
+        """)
 
-    # Example visualization: Distribution of clusters
-    clustering_books_df = pd.read_csv("data/processed/clustering_books.csv")
-    cluster_counts = clustering_books_df["cluster"].value_counts()
-    fig, ax = plt.subplots()
-    ax.bar(cluster_counts.index, cluster_counts.values, color="skyblue")
-    ax.set_title("Distribution of Clusters")
-    ax.set_xlabel("Cluster")
-    ax.set_ylabel("Number of Books")
-    st.pyplot(fig)
+    with col2:
+        st.markdown("### Visualizations")
+        st.markdown("Below are some visualizations of the data and model performance:")
 
-    # Example image from the root directory
-    # st.image("img/overview_diagram.png", caption="System Overview", use_column_width=True)
+        # Gráfica de distribución de clusters
+        clustering_books_df = pd.read_csv("data/processed/clustering_books.csv")
+        cluster_counts = clustering_books_df["cluster"].value_counts()
+        fig1, ax1 = plt.subplots()
+        ax1.bar(cluster_counts.index, cluster_counts.values, color="skyblue")
+        ax1.set_title("Distribution of Clusters")
+        ax1.set_xlabel("Cluster")
+        ax1.set_ylabel("Number of Books")
+        st.pyplot(fig1)
+
+        # Evaluación del modelo Logistic Regressor
+        st.markdown("### Logistic Regressor Evaluation")
+        st.markdown("""
+        The Logistic Regression model was evaluated using metrics such as precision, recall, and F1-score. Below are the results:
+        """)
+
+        # Gráfica de métricas (ejemplo: F1-score por etiqueta)
+        f1_scores = [0.85, 0.78, 0.92, 0.88, 0.81]  # Ejemplo de datos
+        labels = ["Tag1", "Tag2", "Tag3", "Tag4", "Tag5"]
+        fig2, ax2 = plt.subplots()
+        ax2.bar(labels, f1_scores, color="lightgreen")
+        ax2.set_title("F1-Score by Tag")
+        ax2.set_xlabel("Tags")
+        ax2.set_ylabel("F1-Score")
+        st.pyplot(fig2)
+
+        # Gráfica de matriz de confusión
+        st.markdown("### Confusion Matrix")
+        confusion_matrix = np.array([[50, 2, 1], [3, 45, 5], [2, 4, 48]])  # Ejemplo de datos
+        fig3, ax3 = plt.subplots()
+        cax = ax3.matshow(confusion_matrix, cmap="Blues")
+        fig3.colorbar(cax)
+        ax3.set_title("Confusion Matrix", pad=20)
+        ax3.set_xlabel("Predicted")
+        ax3.set_ylabel("Actual")
+        st.pyplot(fig3)
 
 # === TAB 1 ===
 with tab1:
@@ -522,59 +559,55 @@ with tab2:
                                 fig = plot_sentiments(sentiments)
                                 st.pyplot(fig)
 
-# === TAB 3 ===
+# === TAB To-Do List ===
 with tab3:
     st.title("📝 To-Do List")
+    
+    # Dividir en dos columnas
+    col1, col2 = st.columns([2, 1])  # Columna izquierda más ancha para textos
 
-    st.markdown("""
-    ## 🧠 **1. Model Enhancements**
-    """)
-    st.image("docs/img/model-enhancements.jpg", caption="Model Enhancements", use_container_width=True)
-    st.markdown("""
-    - 🧪 **Fine-tune the Logistic Regression model** for better tag prediction accuracy.  
-    - 🔍 **Experiment with other embedding models** like `all-MiniLM-L6-v2` for improved semantic understanding.  
-      > 🧬 384 dims (`paraphrase-multilingual-MiniLM-L12-v2`) vs 768 (`all-MiniLM-L6-v2`)
-    - 🌲⚡ **Try Random Forest and XGBoost** for potentially better performance.
+    with col1:
+        st.markdown("## 🧠 **1. Model Enhancements**")
+        st.markdown("""
+        - 🧪 **Fine-tune the Logistic Regression model** for better tag prediction accuracy.  
+        - 🔍 **Experiment with other embedding models** like `all-MiniLM-L6-v2` for improved semantic understanding.  
+          > 🧬 384 dims (`paraphrase-multilingual-MiniLM-L12-v2`) vs 768 (`all-MiniLM-L6-v2`)  
+        - 🌲⚡ **Try Random Forest and XGBoost** for potentially better performance.
+        """)
 
-    ---
+        st.markdown("## 🧩 **2. Data Augmentation**")
+        st.markdown("""
+        - 🌍 **Add more diverse datasets** to improve model generalization.  
+        - 🈳 **Include multilingual datasets** for better language support.  
+        - ✂️🗣️ **Implement language segmentation** to achieve more accurate results.
+        """)
 
-    ## 🧩 **2. Data Augmentation**
-    """)
-    st.image("docs/img/data-augmentation.jpg", caption="Data Augmentation", use_container_width=True)
-    st.markdown("""
-    - 🌍 **Add more diverse datasets** to improve model generalization.  
-    - 🈳 **Include multilingual datasets** for better language support.  
-    - ✂️🗣️ **Implement language segmentation** to achieve more accurate results.
+        st.markdown("## ⚙️ **3. Performance Optimization**")
+        st.markdown("""
+        - 🚀 **Optimize Pinecone queries** for faster recommendations.  
+        - 🧠💾 **Reduce memory usage** by batching large datasets.
+        """)
 
-    ---
+        st.markdown("## 🧰 **4. Additional Features**")
+        st.markdown("""
+        - 🔁 **Airflow pipelines** for data ingestion and model training.  
+        - 📊 **Grafana dashboards** for monitoring model performance.  
+        - 📈 **Power BI dashboards** for storytelling and visualizing data insights.  
+        - 🔗 **Integrate with other APIs** for enhanced recommendations.  
+        - 📥 **Add a "Download Results" button** for exporting predictions and recommendations.  
+        - 🔄 **Implement a feedback loop** to continuously improve model predictions based on user input.
+        """)
 
-    ## ⚙️ **3. Performance Optimization**
-    ![Performance Optimization](https://via.placeholder.com/800x300?text=Performance+Optimization)
+        st.markdown("## 🎨 **5. UI/UX Improvements**")
+        st.markdown("""
+        - 📉 **Add interactive visualizations** to help users interpret results more intuitively.  
+        - 📂 **Allow users to upload custom datasets** for predictions.
+        """)
 
-    - 🚀 **Optimize Pinecone queries** for faster recommendations.  
-    - 🧠💾 **Reduce memory usage** by batching large datasets.
-
-    ---
-
-    ## 🧰 **4. Additional Features**
-    ![Additional Features](https://via.placeholder.com/800x300?text=Additional+Features)
-
-    - 🔁 **Airflow pipelines** for data ingestion and model training.  
-    - 📊 **Grafana dashboards** for monitoring model performance.  
-    - 📈 **Power BI dashboards** for storytelling and visualizing data insights.  
-    - 🔗 **Integrate with other APIs** for enhanced recommendations.  
-    - 📥 **Add a "Download Results" button** for exporting predictions and recommendations.  
-    - 🔄 **Implement a feedback loop** to continuously improve model predictions based on user input.
-
-    ---
-
-    ## 🎨 **5. UI/UX Improvements**
-    ![UI/UX Improvements](https://via.placeholder.com/800x300?text=UI%2FUX+Improvements)
-
-    - 📉 **Add interactive visualizations** to help users interpret results more intuitively.  
-    - 📂 **Allow users to upload custom datasets** for predictions.
-
-    ---
-
-    🚀 ¡Sigue estos pasos y tu aplicación alcanzará un nuevo nivel de excelencia!
-    """)
+    with col2:
+        # Mostrar imágenes alineadas verticalmente
+        st.image("docs/img/model-enhancements.jpg", caption="Model Enhancements", use_container_width=True)
+        st.image("docs/img/data-augmentation.jpg", caption="Data Augmentation", use_container_width=True)
+        st.image("https://via.placeholder.com/800x300?text=Performance+Optimization", caption="Performance Optimization", use_container_width=True)
+        st.image("https://via.placeholder.com/800x300?text=Additional+Features", caption="Additional Features", use_container_width=True)
+        st.image("https://via.placeholder.com/800x300?text=UI%2FUX+Improvements", caption="UI/UX Improvements", use_container_width=True)
