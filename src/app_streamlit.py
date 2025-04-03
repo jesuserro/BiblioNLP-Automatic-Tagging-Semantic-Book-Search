@@ -278,34 +278,40 @@ tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Pr
 
 # === TAB StoryTelling ===
 with tab_story:
-    st.title("StoryTelling")
+    st.title("📖 StoryTelling")
     
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown("### Motivation")
-        st.markdown("Books inspire, educate, and transform lives. Finding the right book shouldn't be overwhelming.")
+        st.markdown("### 🌟 Motivation")
+        st.markdown("""
+        - Tags connect ideas, powering tools like Kindle and Readwise.  
+        - Boost SEO for niche sites and "Related Books" pages.  
+        - Unlock hidden insights in books and chapters with keywords.  
+        """)
 
-        st.markdown("### Problem")
+        st.markdown("### ❓ Problem")
         st.markdown("""
         - Too many choices.  
         - Poor personalization.  
-        - Incomplete metadata.  
+        - Missing metadata.  
         """)
 
-        st.markdown("### Vision")
-        st.markdown("Bridge readers and books using AI for seamless, personalized discovery.")
-
-        st.markdown("### Why It Matters")
+        st.markdown("### 🚀 Vision")
         st.markdown("""
-        - Foster love for reading.  
-        - Promote lifelong learning.  
-        - Connect people with impactful stories.  
+        - Use AI to link readers and books seamlessly.  
+        - Reveal hidden connections and insights.  
+        """)
+
+        st.markdown("### 💡 Why It Matters")
+        st.markdown("""
+        - Inspire reading.  
+        - Enable lifelong learning.  
+        - Share impactful stories.  
         """)
 
     with col2:
         st.image("img/tag_wordcloud.jpg", caption="Our Vision", use_container_width=True)
-
 
 # === TAB 0 ===
 with tab0:
