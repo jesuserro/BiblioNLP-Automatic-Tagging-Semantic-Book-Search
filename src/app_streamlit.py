@@ -331,19 +331,14 @@ with tab0:
         """)
 
         st.markdown("### 📂 Data Sources")
-        st.markdown("""
-        - **My Books**: Personal Goodreads-tagged dataset.  
-        - **Kaggle Dataset**: Public Goodreads dataset for Pinecone.  
-        """)
-
-        st.markdown("### 🛠️ Models Used")
-        st.markdown("""
-        - **Logistic Regression**: Tag prediction.  
-        - **SentenceTransformer**: Embeddings for semantic similarity.  
-        - **Pinecone**: Vector search for similar books.  
-        - **spaCy**: Extracts key nouns for additional tags.  
-        - **Sentiment Analysis**: Analyzes book blurbs for emotional tone.  
-        """)
+        
+        # Cargar datasets
+        books_df = pd.read_csv("data/processed/books.csv")
+        goodreads_df = pd.read_csv("data/raw/goodreads_data.csv")
+        
+        # Mostrar shapes dinámicamente
+        st.markdown(f"- **My Books**: {books_df.shape[0]} rows, {books_df.shape[1]} columns.")
+        st.markdown(f"- **Kaggle Dataset**: {goodreads_df.shape[0]} rows, {goodreads_df.shape[1]} columns.")
 
     with col2:
         st.markdown("### 📈 Visual Insights")
