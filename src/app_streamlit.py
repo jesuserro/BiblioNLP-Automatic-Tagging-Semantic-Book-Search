@@ -63,10 +63,7 @@ DEFAULT_BOOK_BLURB_2 = (
 DEFAULT_TAGS_INPUT = "galaxies, spacetime, astrophysics"
 TAGS_INPUT_2       = "messi, biography"
 
-st.title("BiblioNLP - Predicción automática de etiquetas")
-st.markdown(
-    "Introduce el título y la sinopsis de uno o más libros para predecir sus etiquetas automáticamente o para obtener recomendaciones."
-)
+st.title("📚 BiblioNLP - 🏷️ Tagging & 📖✨ Recs")
 
 @st.cache_resource
 def load_models():
@@ -277,7 +274,7 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
     }
 
 # Crear pestañas
-tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Generator", "Book Recommender", "To-Do List"])
+tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Predictor", "Book Recommender", "To-Do List"])
 
 # === TAB StoryTelling ===
 with tab_story:
@@ -528,24 +525,57 @@ with tab2:
 # === TAB 3 ===
 with tab3:
     st.title("To-Do List")
+
     st.markdown("""
-    ### Future Improvements
-    - **Model Enhancements**:  
-      - Fine-tune the logistic regression model for better tag prediction accuracy.  
-      - Experiment with other embedding models like `all-MiniLM-L6-v2` for improved semantic understanding.
-    - **Data Augmentation**:  
-      - Add more diverse datasets to improve model generalization.  
-      - Include multilingual datasets for better language support.
-    - **UI/UX Improvements**:  
-      - Add more interactive visualizations.  
-      - Allow users to upload custom datasets for predictions.
-    - **Performance Optimization**:  
-      - Optimize Pinecone queries for faster recommendations.  
-      - Reduce memory usage by batching large datasets.
-    - **Additional Features**:  
-      - Add a "Download Results" button for exporting predictions and recommendations.  
-      - Implement a feedback loop to improve model predictions based on user input.
+    # **Future Improvements**
+
+    ## **1. Model Enhancements**
     """)
+    st.image("docs/img/model-enhancements.jpg", caption="Model Enhancements", use_container_width=True)
+    st.markdown("""
+    - **Fine-tune the Logistic Regression model** for better tag prediction accuracy.  
+    - **Experiment with other embedding models** like `all-MiniLM-L6-v2` for improved semantic understanding.  
+      > 384 dimensions for `paraphrase-multilingual-MiniLM-L12-v2` vs 768 for `all-MiniLM-L6-v2`.
+    - **Try Random Forest and XGBoost** for potentially better performance.
+
+    ---
+    ## **2. Data Augmentation**""")
+    st.image("docs/img/data-augmentation.jpg", caption="Data Augmentation", use_container_width=True)
+    st.markdown("""
+
+    - **Add more diverse datasets** to improve model generalization.  
+    - **Include multilingual datasets** for better language support.  
+    - **Implement language segmentation** to achieve more accurate results.
+
+    ---
+
+    ## **3. Performance Optimization**
+    ![Performance Optimization](https://via.placeholder.com/800x300?text=Performance+Optimization)
+
+    - **Optimize Pinecone queries** for faster recommendations.  
+    - **Reduce memory usage** by batching large datasets.
+
+    ---
+
+    ## **4. Additional Features**
+    ![Additional Features](https://via.placeholder.com/800x300?text=Additional+Features)
+
+    - **Add a "Download Results" button** for exporting predictions and recommendations.  
+    - **Implement a feedback loop** to continuously improve model predictions based on user input.
+
+    ---
+
+    ## **5. UI/UX Improvements**
+    ![UI/UX Improvements](https://via.placeholder.com/800x300?text=UI%2FUX+Improvements)
+
+    - **Add interactive visualizations** to help users interpret results more intuitively.  
+    - **Allow users to upload custom datasets** for predictions.
+
+    ---
+
+    ¡Sigue estos pasos y tu aplicación alcanzará un nuevo nivel de excelencia!
+    """)
+
 
     # Example image for the To-Do List
     # st.image("img/todo_list.png", caption="Future Improvements", use_column_width=True)
