@@ -292,9 +292,9 @@ with tab_story:
 
         st.markdown("### ❓ Problem")
         st.markdown("""
-        - Too many choices.  
-        - Poor personalization.  
-        - Missing metadata.  
+        - Manual tag mapping is exhausting.  
+        - Loss of key meanings in large datasets.  
+        - Missed "black swans" outside trending topics.  
         """)
 
         st.markdown("### 🚀 Vision")
@@ -312,7 +312,7 @@ with tab_story:
 
     with col2:
         st.image("img/tag_wordcloud.jpg", caption="Our Vision", use_container_width=True)
-
+        
 # === TAB 0 ===
 with tab0:
     st.title("Overview")
