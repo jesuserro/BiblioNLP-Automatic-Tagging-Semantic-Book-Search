@@ -278,7 +278,7 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
     }
 
 # Crear pestañas
-tab1, tab2 = st.tabs(["Predicción de etiquetas de libros", "Recomendaciones de libros"])
+tab1, tab2 = st.tabs(["Tag Generator", "Book Recommender"])
 
 # === TAB 1 ===
 with tab1:
@@ -332,7 +332,7 @@ with tab1:
                 
                 # Mostrar libros similares del mismo cluster
                 cluster_books = clustering_books_df[clustering_books_df["cluster"] == cluster].head(5)
-                st.markdown("## Libros similares en el mismo cluster:")
+                st.markdown("### Libros similares en el mismo cluster:")
                 for idx, row in cluster_books.iterrows():
                     st.markdown(f"- {row['book_title']}")
 
