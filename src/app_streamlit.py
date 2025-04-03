@@ -315,70 +315,52 @@ with tab_story:
         
 # === TAB 0 ===
 with tab0:
-    st.title("Overview")
+    st.title("📊 Overview")
     
     # Dividir en dos columnas
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.markdown("### How the Application Works")
+        st.markdown("### 🚀 How It Works")
         st.markdown("""
-        This application is designed to predict tags for books and recommend similar books based on their descriptions. 
-        It uses machine learning models and embeddings to process the input data and generate meaningful results.
+        - **📚 My Data**: Logistic Regression trained on my personal Goodreads-tagged books.  
+        - **🌐 Pinecone Tags**: Logistic Regression trained on a Kaggle Goodreads dataset.  
+        - **🔗 Fusion**: Combines tags from both models + noun extraction for enriched results.
+        - **🔍 Clustering**: KMeans clustering for semantic similarity.
+        - **📖 Recommendations**: Book recommendations based on user-defined tags.  
         """)
 
-        st.markdown("### Data Sources")
+        st.markdown("### 📂 Data Sources")
         st.markdown("""
-        - **Processed Books Dataset**: `data/processed/books.csv`  
-          Contains book titles, blurbs, and tags.  
-          **Shape**: `pd.read_csv('data/processed/books.csv').shape`
-        - **Clustering Dataset**: `data/processed/clustering_books.csv`  
-          Contains book titles and their assigned clusters.  
-          **Shape**: `pd.read_csv('data/processed/clustering_books.csv').shape`
-        - **Raw Goodreads Dataset**: `data/raw/goodreads_data.csv`  
-          Contains raw book data including genres and descriptions.  
-          **Shape**: `pd.read_csv('data/raw/goodreads_data.csv').shape`
+        - **My Books**: Personal Goodreads-tagged dataset.  
+        - **Kaggle Dataset**: Public Goodreads dataset for Pinecone.  
         """)
 
-        st.markdown("### Models Used")
+        st.markdown("### 🛠️ Models Used")
         st.markdown("""
-        - **Logistic Regression**: Used for tag prediction.  
-        - **SentenceTransformer**: Embedding model (`paraphrase-multilingual-MiniLM-L12-v2`) for semantic similarity.  
-        - **KMeans Clustering**: Groups books into clusters based on their embeddings.  
-        - **Pinecone**: Retrieves similar books using vector search.  
-        - **Sentiment Analysis**: RoBERTa-based model for analyzing the sentiment of book blurbs.
-        """)
-
-        st.markdown("### Data Transformation Processes")
-        st.markdown("""
-        - **Text Embedding**: Converts book titles and blurbs into numerical vectors using SentenceTransformer.  
-        - **Tag Prediction**: Logistic regression predicts tags based on embeddings.  
-        - **Clustering**: Groups books into clusters for similarity-based recommendations.  
-        - **Pinecone Integration**: Retrieves top-K similar books using cosine similarity.  
-        - **Noun Extraction**: Extracts relevant nouns from text using spaCy for additional tag enrichment.
+        - **Logistic Regression**: Tag prediction.  
+        - **SentenceTransformer**: Embeddings for semantic similarity.  
+        - **Pinecone**: Vector search for similar books.  
+        - **spaCy**: Extracts key nouns for additional tags.  
+        - **Sentiment Analysis**: Analyzes book blurbs for emotional tone.  
         """)
 
     with col2:
-        st.markdown("### Visualizations")
-        st.markdown("Below are some visualizations of the data and model performance:")
+        st.markdown("### 📈 Visual Insights")
+        st.markdown("Key visualizations of data and model performance:")
 
         # Gráfica de distribución de clusters
         clustering_books_df = pd.read_csv("data/processed/clustering_books.csv")
         cluster_counts = clustering_books_df["cluster"].value_counts()
         fig1, ax1 = plt.subplots()
         ax1.bar(cluster_counts.index, cluster_counts.values, color="skyblue")
-        ax1.set_title("Distribution of Clusters")
+        ax1.set_title("📊 Cluster Distribution")
         ax1.set_xlabel("Cluster")
-        ax1.set_ylabel("Number of Books")
+        ax1.set_ylabel("Books")
         st.pyplot(fig1)
 
         # Evaluación del modelo Logistic Regressor
-        st.markdown("### Logistic Regressor Evaluation")
-        st.markdown("""
-        The Logistic Regression model was evaluated using metrics such as precision, recall, and F1-score. Below are the results:
-        """)
-
-        # Gráfica de métricas (ejemplo: F1-score por etiqueta)
+        st.markdown("### 🎯 Logistic Regression Performance")
         f1_scores = [0.85, 0.78, 0.92, 0.88, 0.81]  # Ejemplo de datos
         labels = ["Tag1", "Tag2", "Tag3", "Tag4", "Tag5"]
         fig2, ax2 = plt.subplots()
@@ -387,17 +369,6 @@ with tab0:
         ax2.set_xlabel("Tags")
         ax2.set_ylabel("F1-Score")
         st.pyplot(fig2)
-
-        # Gráfica de matriz de confusión
-        st.markdown("### Confusion Matrix")
-        confusion_matrix = np.array([[50, 2, 1], [3, 45, 5], [2, 4, 48]])  # Ejemplo de datos
-        fig3, ax3 = plt.subplots()
-        cax = ax3.matshow(confusion_matrix, cmap="Blues")
-        fig3.colorbar(cax)
-        ax3.set_title("Confusion Matrix", pad=20)
-        ax3.set_xlabel("Predicted")
-        ax3.set_ylabel("Actual")
-        st.pyplot(fig3)
 
 # === TAB 1 ===
 with tab1:
