@@ -139,7 +139,6 @@ def format_real_tags(real_tags, predicted_tags):
     return ", ".join(formatted_tags)
 
 # Función para colorear tags predichos
-# Función para colorear tags predichos
 def format_predicted_tags(predicted_tags, real_tags, scores):
     formatted_tags = []
     for tag, score in zip(predicted_tags, scores):
@@ -278,7 +277,41 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
     }
 
 # Crear pestañas
-tab0, tab1, tab2, tab3 = st.tabs(["Overview", "Tag Generator", "Book Recommender", "To-Do List"])
+tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Generator", "Book Recommender", "To-Do List"])
+
+# === TAB StoryTelling ===
+with tab_story:
+    st.title("StoryTelling")
+    st.markdown("### The Motivation Behind the Project")
+    st.markdown("""
+    Books have always been a gateway to knowledge, imagination, and personal growth. However, in a world where millions of books are published every year, finding the right book can feel overwhelming.  
+    This project was born out of a love for literature and a desire to make the process of discovering books more intuitive and meaningful.  
+    """)
+
+    st.markdown("### The Problem We Aim to Solve")
+    st.markdown("""
+    - **Overwhelming Choices**: With so many books available, readers often struggle to find books that truly resonate with their interests.  
+    - **Lack of Personalization**: Traditional recommendation systems often fail to capture the nuanced preferences of readers.  
+    - **Disconnected Metadata**: Many books lack proper tagging, making it difficult to categorize and recommend them effectively.  
+    """)
+
+    st.markdown("### Our Vision")
+    st.markdown("""
+    Imagine a world where every reader can effortlessly discover books that inspire, educate, and entertain them.  
+    Our goal is to bridge the gap between readers and books by leveraging the power of machine learning and natural language processing to create a seamless and personalized book discovery experience.  
+    """)
+
+    st.markdown("### Why This Matters")
+    st.markdown("""
+    Books have the power to change lives. By helping readers find the right books, we can:  
+    - Foster a deeper love for reading.  
+    - Encourage lifelong learning.  
+    - Connect people with stories and ideas that resonate with their unique journeys.  
+    """)
+
+    # Add an emotional image to enhance storytelling
+    # st.image("img/storytelling_books.jpg", caption="Books: A Gateway to Knowledge and Imagination", use_column_width=True)
+
 
 # === TAB 0 ===
 with tab0:
