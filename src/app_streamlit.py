@@ -357,7 +357,7 @@ with tab0:
         # Sentiments Section
         st.markdown("#### 🎭 Sentiments")
         st.markdown("Analyze the emotional tone of book descriptions to add depth to tags.")
-        st.image("img/roberta-sadness.jpg", caption="Distribución de 'sadness' según RoBERTa", use_container_width=True)
+        st.image("img/roberta-emotions.jpg", caption="Distribución sentimientos de mi df según RoBERTa", use_container_width=True)
 
     with col2:
         
