@@ -275,7 +275,7 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
     }
 
 # Crear pestañas
-tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Predictor", "Book Recommender", "To-Do List"])
+tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Predictor & Clustering", "Book Recommender", "To-Do List"])
 
 # === TAB StoryTelling ===
 with tab_story:
@@ -346,6 +346,11 @@ with tab0:
         """)
 
     with col2:
+        # Mostrar el head(5) del archivo books.csv
+        st.markdown("### 📋 Sample of My Books Dataset")
+        books_df = pd.read_csv("data/processed/books.csv")  # Asegúrate de que el archivo esté en la ruta correcta
+        st.dataframe(books_df.head(5))  # Mostrar las primeras 5 filas del DataFrame
+
         # Evaluación del modelo Logistic Regressor
         st.markdown("### 🎯 Logistic Regression Performance")
         
