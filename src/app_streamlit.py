@@ -319,6 +319,12 @@ with tab0:
     col1, col2 = st.columns([1, 1])
 
     with col1:
+
+        # Mostrar el head(5) del archivo books.csv
+        st.markdown("### 📋 Sample of My Books Dataset")
+        books_df = pd.read_csv("data/processed/books.csv")  # Asegúrate de que el archivo esté en la ruta correcta
+        st.dataframe(books_df.head(5))  # Mostrar las primeras 5 filas del DataFrame
+
         st.markdown("### 🚀 How It Works")
         st.markdown("""
         - **📚 My Logistic Regression Model**: Trained on my personal Goodreads-tagged books.  
@@ -329,7 +335,6 @@ with tab0:
         st.markdown("### 📂 Data Sources")
         
         # Cargar datasets
-        books_df = pd.read_csv("data/processed/books.csv")
         goodreads_df = pd.read_csv("data/raw/goodreads_data.csv")
         
         # Mostrar shapes dinámicamente
@@ -338,19 +343,24 @@ with tab0:
 
         # Nueva sección: Mejoras de Tags
         st.markdown("### 🛠️ Tagging Enhancements")
-        st.markdown("""
-        - **🔍 Clustering**: Group books based on semantic similarity for better organization.  
-        - **📖 Recommendations**: Suggest books based on user-defined tags and preferences.  
-        - **🔗 Fusion**: Combine tags from multiple models and noun extraction for enriched results.  
-        - **🎭 Sentiments**: Analyze the emotional tone of book descriptions to add depth to tags.  
-        """)
+
+        # Clustering Section
+        st.markdown("#### 🔍 Clustering")
+        st.markdown("Group books based on semantic similarity for better organization.")
+        st.image("img/clustering_books.jpg", caption="Clustering de libros (PCA)", use_container_width=True)
+
+        # Recommendations Section
+        st.markdown("#### 📖 Recommendations")
+        st.markdown("Suggest books based on user-defined tags and preferences.")
+        st.image("img/silhouette_plot_no_tags.jpg", caption="Silhouette Plot (Sin Tags)", use_container_width=True)
+
+        # Sentiments Section
+        st.markdown("#### 🎭 Sentiments")
+        st.markdown("Analyze the emotional tone of book descriptions to add depth to tags.")
+        st.image("img/roberta-sadness.jpg", caption="Distribución de 'sadness' según RoBERTa", use_container_width=True)
 
     with col2:
-        # Mostrar el head(5) del archivo books.csv
-        st.markdown("### 📋 Sample of My Books Dataset")
-        books_df = pd.read_csv("data/processed/books.csv")  # Asegúrate de que el archivo esté en la ruta correcta
-        st.dataframe(books_df.head(5))  # Mostrar las primeras 5 filas del DataFrame
-
+        
         # Evaluación del modelo Logistic Regressor
         st.markdown("### 🎯 Logistic Regression Performance")
         
@@ -367,7 +377,7 @@ with tab0:
 
         # Carga imagen img/label_coverage_comparison.jpg
         label_coverage_img = "img/label_coverage_comparison.jpg"
-        st.image(label_coverage_img, caption="Label Coverage: Real vs Predicted", use_container_width=True)  
+        st.image(label_coverage_img, caption="Label Coverage: Real vs Predicted", use_container_width=True)
 
 # === TAB 1 ===
 with tab1:
