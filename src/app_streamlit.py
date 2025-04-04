@@ -283,31 +283,28 @@ with tab_story:
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown("### 🌟 Motivation")
+        st.markdown("## 🎯 Purpose & Potential")
         st.markdown("""
-        - Tags connect ideas, powering tools like Kindle and Readwise.  
-        - Boost SEO for niche sites and "Related Books" pages.  
-        - Unlock hidden insights in books and chapters with keywords.  
+        - 🔗 **Connect ideas** through smart tags  
+            - Kindle highlights, Readwise, Related Books  
+        - 🚀 **Boost discovery** and SEO  
+            - Niche sites, topic clusters  
+        - 🧠 **Unlock insights** hidden in chapters or large datasets  
+        - 🕵️ **Analyze content contextually**  
+            - Spam detection, email tagging, mood tracking, call urgency
         """)
 
-        st.markdown("### ❓ Problem")
+        st.markdown("## 😓 The Challenge")
         st.markdown("""
-        - Manual tag mapping is exhausting.  
-        - Loss of key meanings in large datasets.  
-        - Missed "black swans" outside trending topics.  
+        - ⛏️ **Manual tagging is exhausting** and error-prone  
+        - 🧩 **Meaning gets lost** in large, unstructured data  
         """)
 
-        st.markdown("### 🚀 Vision")
+        st.markdown("## 🌟 The Vision")
         st.markdown("""
-        - Use AI to link readers and books seamlessly.  
-        - Reveal hidden connections and insights.  
-        """)
-
-        st.markdown("### 💡 Why It Matters")
-        st.markdown("""
-        - Inspire reading.  
-        - Enable lifelong learning.  
-        - Share impactful stories.  
+        - 🤖 **AI bridges readers and content effortlessly**  
+        - 🔍 **Reveals meaningful patterns** across books & media  
+        - 📚 **Fuels curiosity, learning, and storytelling**  
         """)
 
     with col2:
