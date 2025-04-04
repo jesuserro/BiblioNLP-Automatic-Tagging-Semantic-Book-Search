@@ -331,6 +331,15 @@ with tab0:
         books_df = pd.read_csv("data/processed/books.csv")  # Asegúrate de que el archivo esté en la ruta correcta
         st.dataframe(books_df.head(5))  # Mostrar las primeras 5 filas del DataFrame
 
+        # Mostrar análisis de la columna tags
+        st.markdown("### 🏷️ Tags Analysis")
+        df_tags_analysis = books_df["tags"].value_counts( index=True).reset_index()
+        df_tags_analysis.columns = ["tags", "count"]
+        df_tags_analysis["tags"] = df_tags_analysis["tags"].str.replace(" ", "-")
+        df_tags_analysis = df_tags_analysis.sort_values(by="count", ascending=False)
+        st.dataframe(df_tags_analysis.head(10))
+
+
         st.markdown("### 🚀 How It Works")
         st.markdown("""
         - **📚 My Logistic Regression Model**: Trained on my personal Goodreads-tagged books.  
