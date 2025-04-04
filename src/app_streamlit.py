@@ -18,6 +18,7 @@ from spacy.lang.es.stop_words import STOP_WORDS as STOP_WORDS_ES
 import re
 import configparser
 import os
+import seaborn as sns
 
 st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚", layout="wide")
 
@@ -184,7 +185,7 @@ try:
         # Crear el índice si no existe
         pc.create_index(
             name=INDEX_NAME,
-            dimension=384,  # Cambia esto según las dimensiones de tus embeddings
+            dimension=384,
             metric="cosine",
             spec=ServerlessSpec(cloud="aws", region=PINECONE_ENV)
         )
@@ -193,7 +194,7 @@ try:
         st.info("Índice Pinecone existente. Conectando...")
 
     # Obtener el índice
-    index = pc.Index(INDEX_NAME)
+    index = pc.Index(INDEX_NAME)  # Asegúrate de que `index` sea un objeto Pinecone Index
 except exceptions.PineconeApiException as e:
     st.error(f"Error al inicializar Pinecone: {e}")
     st.stop()
@@ -345,29 +346,87 @@ with tab0:
         """)
 
     with col2:
-        st.markdown("### 📈 Visual Insights")
-        st.markdown("Key visualizations of data and model performance:")
-
-        # Gráfica de distribución de clusters
-        clustering_books_df = pd.read_csv("data/processed/clustering_books.csv")
-        cluster_counts = clustering_books_df["cluster"].value_counts()
-        fig1, ax1 = plt.subplots()
-        ax1.bar(cluster_counts.index, cluster_counts.values, color="skyblue")
-        ax1.set_title("📊 Cluster Distribution")
-        ax1.set_xlabel("Cluster")
-        ax1.set_ylabel("Books")
-        st.pyplot(fig1)
-
         # Evaluación del modelo Logistic Regressor
         st.markdown("### 🎯 Logistic Regression Performance")
-        f1_scores = [0.85, 0.78, 0.92, 0.88, 0.81]  # Ejemplo de datos
-        labels = ["Tag1", "Tag2", "Tag3", "Tag4", "Tag5"]
-        fig2, ax2 = plt.subplots()
-        ax2.bar(labels, f1_scores, color="lightgreen")
-        ax2.set_title("F1-Score by Tag")
-        ax2.set_xlabel("Tags")
-        ax2.set_ylabel("F1-Score")
+        
+        # 1. F1 Scores per Tag
+        f1_scores = pd.read_csv('data/processed/f1_scores.csv')
+        f1_scores = f1_scores.sort_values(by='F1-Score', ascending=False).head(30)
+
+        fig1, ax1 = plt.subplots(figsize=(10, 8))
+        sns.barplot(
+            x='F1-Score', 
+            y='Tag', 
+            data=f1_scores, 
+            palette='Blues_r',
+            ax=ax1
+        )
+        ax1.set_title('Top 30 F1 Scores per Tag', fontsize=14)
+        ax1.set_xlabel('F1 Score (%)', fontsize=12)
+        ax1.set_ylabel('Tags', fontsize=12)
+        ax1.grid(axis='x', linestyle='--', alpha=0.7)
+        for index, value in enumerate(f1_scores['F1-Score']):
+            ax1.text(value + 0.01, index, f"{value:.2%}", va='center', fontsize=10)
+        st.pyplot(fig1)
+
+        # 2. Distribution of Accuracy per Sample
+        accuracy_histogram = pd.read_csv('data/processed/accuracy_histogram.csv')
+        accuracy_histogram['Interval'] = accuracy_histogram['Interval'].str.replace(' - ', '–')
+
+        fig2, ax2 = plt.subplots(figsize=(10, 6))
+        colors = sns.color_palette("RdYlGn", len(accuracy_histogram))
+        sns.barplot(
+            x='Interval', 
+            y='Count', 
+            data=accuracy_histogram, 
+            palette=colors,
+            ax=ax2
+        )
+        ax2.set_title('Distribution of Accuracy per Sample', fontsize=14)
+        ax2.set_xlabel('Accuracy Interval (%)', fontsize=12)
+        ax2.set_ylabel('Number of Books', fontsize=12)
+        ax2.grid(axis='y', linestyle='--', alpha=0.7)
+        for index, value in enumerate(accuracy_histogram['Count']):
+            ax2.text(index, value + 1, f"{value:.0f}", ha='center', fontsize=10)
         st.pyplot(fig2)
+
+        # 3. Label Coverage: Real vs Predicted
+        # 3. Label Coverage: Real vs Predicted
+        # Leer datos
+        label_coverage = pd.read_csv('data/processed/label_coverage.csv')
+
+        # Asegurarse de que el total sea correcto
+        total_count = 1312  # Total fijo basado en la información proporcionada
+        label_coverage['Percentage'] = label_coverage['Count'] / total_count * 100
+
+        # Crear gráfica
+        fig3, ax3 = plt.subplots(figsize=(8, 6))
+
+        # Forzar colores personalizados: gris para la primera, verde para la segunda
+        colors = ['gray', 'green']
+        sns.barplot(
+            x='Label Type',
+            y='Count',
+            data=label_coverage,
+            palette=colors,
+            ax=ax3
+        )
+
+        # Títulos y ejes
+        ax3.set_title('Label Coverage: Real vs Predicted', fontsize=14)
+        ax3.set_xlabel('Label Type', fontsize=12)
+        ax3.set_ylabel('Total Count', fontsize=12)
+        ax3.grid(axis='y', linestyle='--', alpha=0.7)
+
+        # Anotar valores y porcentajes encima de cada barra
+        for index, row in label_coverage.iterrows():
+            count = row['Count']
+            pct = row['Percentage']
+            label = f"{count:.0f} ({pct:.1f}%)"
+            ax3.text(index, count + total_count * 0.02, label, ha='center', fontsize=10)
+
+        # Mostrar en Streamlit
+        st.pyplot(fig3)
 
 # === TAB 1 ===
 with tab1:
@@ -541,7 +600,7 @@ with tab3:
         - 🔗 **Tags ↔️ Books consistency**  
             - Books need tags, and tags need books — both ways  
         - 🧩 **Augment with diverse and multilingual datasets**  
-            - Language segmentation improves context
+            - Language segmentation improves context  
         """)
 
         st.markdown("## 🔧 Continuous Model Evolution")
@@ -552,8 +611,19 @@ with tab3:
             - Tags, categories (tag groups), friends, or company profiles  
         - 🧪 **Bias analysis**  
             - Compare personalized models with Goodreads’ patterns  
-        - 🧠 **Explore and test ML techniques**  
+        - 🧠 **Explore ML techniques**  
             - Logistic Regression, embeddings, Random Forest, XGBoost  
+        """)
+
+        st.markdown("### 📐 Embedding Improvements")
+        st.markdown("""
+        - ➕ **Add richer input text**  
+            - Include *author*, *publisher*, and more metadata  
+        - 📏 **Increase embedding dimensions**  
+            - From 384 → higher, to capture more nuance  
+        - 🔁 **Test alternative models**  
+            - Currently using `"paraphrase-multilingual-MiniLM-L12-v2"`  
+            - Open to exploring other Hugging Face options  
         """)
 
         st.markdown("## ⚙️ Performance & Tooling")
