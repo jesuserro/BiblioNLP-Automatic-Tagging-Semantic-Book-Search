@@ -275,13 +275,19 @@ def predict_with_ensemble(title, blurb, top_k=5, threshold=0.3, enrich_with_noun
     }
 
 # Crear pestañas
-tab_story, tab0, tab1, tab2, tab3 = st.tabs(["StoryTelling", "Overview", "Tag Predictor & Clustering", "Book Recommender", "To-Do List"])
+tab_story, tab0, tab1, tab2, tab3 = st.tabs([
+    "📖 Project Storytelling",        # Motivación, visión, contexto general
+    "🧭 System Overview",             # Diagrama general, arquitectura, flujo de datos
+    "🧠 Predict Tags from Text (Solo)",      # Tu modelo: input = texto, output = etiquetas
+    "🎯 Recommend Books from Tags (Collab Model)",   # Modelo colaborativo: input = tags, output = libros
+    "✅ To-Do & Roadmap"             # Tareas, backlog, próximos pasos
+])
 
 # === TAB StoryTelling ===
 with tab_story:
     st.title("📖 StoryTelling")
     
-    col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([1, 1])
 
     with col1:
         st.markdown("## 🎯 Purpose & Potential")
@@ -542,7 +548,7 @@ with tab2:
 with tab3:
     st.title("📝 To-Do List")
     
-    col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([1, 1])
 
     with col1:
         st.markdown("## 📚 Data Foundations")
