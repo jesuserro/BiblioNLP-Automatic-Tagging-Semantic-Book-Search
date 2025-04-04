@@ -352,8 +352,7 @@ with tab0:
         # Recommendations Section
         st.markdown("#### 📖 Recommendations")
         st.markdown("Suggest books based on user-defined tags and preferences.")
-        st.image("img/silhouette_plot_no_tags.jpg", caption="Silhouette Plot (Sin Tags)", use_container_width=True)
-
+        
         # Sentiments Section
         st.markdown("#### 🎭 Sentiments")
         st.markdown("Analyze the emotional tone of book descriptions to add depth to tags.")
@@ -378,6 +377,10 @@ with tab0:
         # Carga imagen img/label_coverage_comparison.jpg
         label_coverage_img = "img/label_coverage_comparison.jpg"
         st.image(label_coverage_img, caption="Label Coverage: Real vs Predicted", use_container_width=True)
+
+        # Evaluación del modelo de clustering
+        st.markdown("### 🎯 Clustering Evaluation")
+        st.image("img/silhouette_plot_no_tags.jpg", caption="Silhouette Plot (Sin Tags)", use_container_width=True)
 
 # === TAB 1 ===
 with tab1:
