@@ -350,83 +350,19 @@ with tab0:
         st.markdown("### 🎯 Logistic Regression Performance")
         
         # 1. F1 Scores per Tag
-        f1_scores = pd.read_csv('data/processed/f1_scores.csv')
-        f1_scores = f1_scores.sort_values(by='F1-Score', ascending=False).head(30)
-
-        fig1, ax1 = plt.subplots(figsize=(10, 8))
-        sns.barplot(
-            x='F1-Score', 
-            y='Tag', 
-            data=f1_scores, 
-            palette='Blues_r',
-            ax=ax1
-        )
-        ax1.set_title('Top 30 F1 Scores per Tag', fontsize=14)
-        ax1.set_xlabel('F1 Score (%)', fontsize=12)
-        ax1.set_ylabel('Tags', fontsize=12)
-        ax1.grid(axis='x', linestyle='--', alpha=0.7)
-        for index, value in enumerate(f1_scores['F1-Score']):
-            ax1.text(value + 0.01, index, f"{value:.2%}", va='center', fontsize=10)
-        st.pyplot(fig1)
-
+        f1_scores_img = "img/f1_score_per_tag.jpg"
+        st.image(f1_scores_img, caption="F1 Scores per Tag", use_container_width=True)
+        
         # 2. Distribution of Accuracy per Sample
-        accuracy_histogram = pd.read_csv('data/processed/accuracy_histogram.csv')
-        accuracy_histogram['Interval'] = accuracy_histogram['Interval'].str.replace(' - ', '–')
-
-        fig2, ax2 = plt.subplots(figsize=(10, 6))
-        colors = sns.color_palette("RdYlGn", len(accuracy_histogram))
-        sns.barplot(
-            x='Interval', 
-            y='Count', 
-            data=accuracy_histogram, 
-            palette=colors,
-            ax=ax2
-        )
-        ax2.set_title('Distribution of Accuracy per Sample', fontsize=14)
-        ax2.set_xlabel('Accuracy Interval (%)', fontsize=12)
-        ax2.set_ylabel('Number of Books', fontsize=12)
-        ax2.grid(axis='y', linestyle='--', alpha=0.7)
-        for index, value in enumerate(accuracy_histogram['Count']):
-            ax2.text(index, value + 1, f"{value:.0f}", ha='center', fontsize=10)
-        st.pyplot(fig2)
+        accuracy_histogram_img = "img/accuracy_per_sample_hist.jpg"
+        st.image(accuracy_histogram_img, caption="Distribution of Accuracy per Sample", use_container_width=True)
 
         # 3. Label Coverage: Real vs Predicted
-        # 3. Label Coverage: Real vs Predicted
-        # Leer datos
         label_coverage = pd.read_csv('data/processed/label_coverage.csv')
 
-        # Asegurarse de que el total sea correcto
-        total_count = 1312  # Total fijo basado en la información proporcionada
-        label_coverage['Percentage'] = label_coverage['Count'] / total_count * 100
-
-        # Crear gráfica
-        fig3, ax3 = plt.subplots(figsize=(8, 6))
-
-        # Forzar colores personalizados: gris para la primera, verde para la segunda
-        colors = ['gray', 'green']
-        sns.barplot(
-            x='Label Type',
-            y='Count',
-            data=label_coverage,
-            palette=colors,
-            ax=ax3
-        )
-
-        # Títulos y ejes
-        ax3.set_title('Label Coverage: Real vs Predicted', fontsize=14)
-        ax3.set_xlabel('Label Type', fontsize=12)
-        ax3.set_ylabel('Total Count', fontsize=12)
-        ax3.grid(axis='y', linestyle='--', alpha=0.7)
-
-        # Anotar valores y porcentajes encima de cada barra
-        for index, row in label_coverage.iterrows():
-            count = row['Count']
-            pct = row['Percentage']
-            label = f"{count:.0f} ({pct:.1f}%)"
-            ax3.text(index, count + total_count * 0.02, label, ha='center', fontsize=10)
-
-        # Mostrar en Streamlit
-        st.pyplot(fig3)
+        # Carga imagen img/label_coverage_comparison.jpg
+        label_coverage_img = "img/label_coverage_comparison.jpg"
+        st.image(label_coverage_img, caption="Label Coverage: Real vs Predicted", use_container_width=True)  
 
 # === TAB 1 ===
 with tab1:
