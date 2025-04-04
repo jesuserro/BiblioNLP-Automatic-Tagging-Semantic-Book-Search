@@ -532,38 +532,46 @@ with tab3:
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown("## 🧠 Model Enhancements")
+        st.markdown("## 📚 Data Foundations")
         st.markdown("""
-        - Fine-tune Logistic Regression.  
-        - Test advanced embeddings.  
-        - Explore Random Forest/XGBoost.  
+        - ✅ **Balanced tagging is critical**  
+            - Each book must have a **minimum and maximum number of tags**  
+        - 🔄 **Healthy tag distributions**  
+            - Each tag must be associated with enough books  
+        - 🔗 **Tags ↔️ Books consistency**  
+            - Books need tags, and tags need books — both ways  
+        - 🧩 **Augment with diverse and multilingual datasets**  
+            - Language segmentation improves context
         """)
 
-        st.markdown("## 🧩 Data Augmentation")
+        st.markdown("## 🔧 Continuous Model Evolution")
         st.markdown("""
-        - Add diverse datasets.  
-        - Include multilingual data.  
-        - Segment languages.  
+        - 🎯 **Start point** for continuous refinement  
+            - Tags grow and evolve over time  
+        - 🧬 **Specialized models** for:
+            - Tags, categories (tag groups), friends, or company profiles  
+        - 🧪 **Bias analysis**  
+            - Compare personalized models with Goodreads’ patterns  
+        - 🧠 **Explore and test ML techniques**  
+            - Logistic Regression, embeddings, Random Forest, XGBoost  
         """)
 
-        st.markdown("## ⚙️ Performance")
+        st.markdown("## ⚙️ Performance & Tooling")
         st.markdown("""
-        - Optimize Pinecone queries.  
-        - Reduce memory usage.  
+        - 🚀 **Performance tuning**  
+            - Optimize Pinecone queries, reduce memory  
+        - 🧰 **Robust MLOps tooling**  
+            - Airflow pipelines, dashboards (Grafana/Power BI), feedback loops  
+        - 📥 **Export & feedback integration**  
+            - Download results, improve with user input  
         """)
 
-        st.markdown("## 🧰 Features")
+        st.markdown("## 🎨 User Experience")
         st.markdown("""
-        - Add Airflow pipelines.  
-        - Create dashboards (Grafana/Power BI).  
-        - Enable result downloads.  
-        - Implement feedback loop.  
-        """)
-
-        st.markdown("## 🎨 UI/UX")
-        st.markdown("""
-        - Add interactive visuals.  
-        - Allow custom dataset uploads.  
+        - 🖼️ **Interactive and engaging UI**  
+            - Visual insights, intuitive flow  
+        - 📁 **Custom dataset uploads**  
+            - Let users personalize their input  
         """)
 
     with col2:
