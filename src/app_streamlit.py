@@ -326,19 +326,42 @@ with tab0:
 
     with col1:
 
-        # Mostrar el head(5) del archivo books.csv
         st.markdown("### 📋 Sample of My Books Dataset")
-        books_df = pd.read_csv("data/processed/books.csv")  # Asegúrate de que el archivo esté en la ruta correcta
-        st.dataframe(books_df.head(5))  # Mostrar las primeras 5 filas del DataFrame
+        books_df = pd.read_csv("data/processed/books.csv")
+        st.dataframe(books_df.head(5))
 
-        # Mostrar análisis de la columna tags
-        st.markdown("### 🏷️ Tags Analysis")
-        df_tags_analysis = books_df["tags"].value_counts( index=True).reset_index()
-        df_tags_analysis.columns = ["tags", "count"]
-        df_tags_analysis["tags"] = df_tags_analysis["tags"].str.replace(" ", "-")
-        df_tags_analysis = df_tags_analysis.sort_values(by="count", ascending=False)
-        st.dataframe(df_tags_analysis.head(10))
+        st.markdown("### 🏷️ Top Tags Analysis with Percentage")
 
+        # Separar tags por coma
+        books_df["tags"] = books_df["tags"].astype(str).str.split(",")
+
+        # Explotar tags en filas
+        tags_exploded = books_df.explode("tags")
+        tags_exploded["tags"] = tags_exploded["tags"].str.strip().str.replace(" ", "-")
+
+        # Calcular total de tags únicos
+        total_unique_tags = tags_exploded["tags"].nunique()
+
+        # Mostrar total
+        st.markdown(f"**📌 Total unique tags in dataset:** `{total_unique_tags}`")
+
+        # Conteo de tags y porcentaje
+        df_tags_analysis = (
+            tags_exploded["tags"]
+            .value_counts()
+            .head(30)
+            .reset_index()
+        )
+        df_tags_analysis.columns = ["tag", "count"]
+
+        # Total de apariciones de tags (para calcular el %)
+        total_tag_occurrences = tags_exploded.shape[0]
+        df_tags_analysis["percentage"] = (df_tags_analysis["count"] / total_tag_occurrences * 100).round(2)
+
+        # Ordenar por porcentaje descendente
+        df_tags_analysis = df_tags_analysis.sort_values(by="percentage", ascending=False)
+
+        st.dataframe(df_tags_analysis)
 
         st.markdown("### 🚀 How It Works")
         st.markdown("""
