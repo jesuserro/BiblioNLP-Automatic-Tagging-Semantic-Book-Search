@@ -502,6 +502,10 @@ with tab2:
                 books_df = pd.read_csv("data/processed/books.csv")
                 book_embeddings = recommendation_model.encode(books_df["blurb"].tolist())
 
+                # Cargar el modelo Random Forest y el binarizador
+                rf_model = joblib.load("model/book_tagging_rf.joblib")
+                rf_mlb = joblib.load("model/book_tagging_rf_mlb.joblib")
+
                 st.success("Resultados:")
                 for i, tags_input in enumerate(tags_inputs):
                     input_tags = [tag.strip() for tag in tags_input.split(",")]
@@ -542,13 +546,20 @@ with tab2:
                             with col1:
                                 st.markdown(f"### 📖 {row['book_title']}")
 
-                                # Predicción de etiquetas
-                                text = row["blurb"]
+                                # Datos de entrada para la predicción
+                                text = row['book_title'] + ". " + row["blurb"]
+
+                                # Predicción de etiquetas con el modelo de Logistic Regression
                                 X_test = embedding_model.encode([text])
                                 preds_proba = np.array([proba[:, 1] for proba in clf.predict_proba(X_test)]).T
                                 preds = (preds_proba >= 0.3).astype(int)
                                 predicted_tags = mlb.inverse_transform(preds)[0]
                                 scores = preds_proba[0]
+
+                                # Predicción de etiquetas con Random Forest
+                                X_test_rf = embedding_model.encode([text])
+                                preds_rf = rf_model.predict(X_test_rf)
+                                predicted_tags_rf = rf_mlb.inverse_transform(preds_rf)[0]
 
                                 # Etiquetas reales con coincidencias resaltadas
                                 real_tags = row["tags"].split(", ")
@@ -562,15 +573,23 @@ with tab2:
                                 # Predicción de etiquetas Pinecone
                                 ensemble_result = predict_with_ensemble(row["book_title"], row["blurb"])
                                 pinecone_tags = ensemble_result["tags_pinecone"]
-                                pinecone_scores = [0.5] * len(pinecone_tags)  # Placeholder scores
-                                # formatted_pinecone_tags = format_predicted_tags(pinecone_tags, real_tags, pinecone_scores)
                                 formatted_pinecone_tags = format_pinecone_tags(pinecone_tags, real_tags)
                                 st.markdown(f"- **Predicted by Others (Pinecone):** {formatted_pinecone_tags}", unsafe_allow_html=True)
+
+                                # Formatear etiquetas predichas por Random Forest
+                                formatted_rf_tags = format_predicted_tags(predicted_tags_rf, real_tags, [1.0] * len(predicted_tags_rf))
+                                st.markdown(f"- **Predicted by Random Forest (BETA):** {formatted_rf_tags}", unsafe_allow_html=True)
 
                                 # Etiquetas sustantivas
                                 noun_tags = ensemble_result["tags_nouns"]
                                 formatted_noun_tags = format_noun_tags(noun_tags, real_tags)
                                 st.markdown(f"- **From Blurb (Lemmatized):** {formatted_noun_tags}", unsafe_allow_html=True)
+
+                                # Predicción de etiquetas combinadas (fusión)
+                                # fusion_tags = ensemble_result["tags_fusion"]
+                                # formatted_fusion_tags = format_predicted_tags(fusion_tags, real_tags, [0.5] * len(fusion_tags))
+                                # st.markdown(f"- **Combined Tags (Fusion):** {formatted_fusion_tags}", unsafe_allow_html=True)
+
                             with col2:
                                 sentiments = analyze_sentiments(row["blurb"])
                                 fig = plot_sentiments(sentiments)
