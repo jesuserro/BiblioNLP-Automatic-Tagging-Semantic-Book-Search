@@ -1,4 +1,4 @@
-# 📚 **BiblioNLP: Semantic Book Discovery**
+# 📚 **BiblioNLP: Automatic Tagging & Semantic/Sentiment Book Discovery**
 
 *Unlock the power of AI to tag, cluster, and recommend books seamlessly.*
 
