@@ -6,6 +6,8 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![NLP](https://img.shields.io/badge/NLP-Sentiment%20Analysis-green)](https://www.nltk.org/)
 [![Transformers](https://img.shields.io/badge/Transformers-Hugging%20Face-orange)](https://huggingface.co/)
+[![Keras](https://img.shields.io/badge/Keras-Deep%20Learning-red)](https://keras.io/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)](https://www.tensorflow.org/)
 
 BiblioNLP is an **AI-powered platform** that combines **Natural Language Processing (NLP)** and **Machine Learning** to transform how we explore books. From **automatic tagging** to **sentiment analysis** and **semantic recommendations**, this project showcases cutting-edge techniques to enhance book discovery.
 
@@ -13,7 +15,7 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 
 ## ✨ **Key Features**
 
-- 🏷️ **Automatic Tagging**: Multilabel classification using **Logistic Regression** and **Random Forest** models.
+- 🏷️ **Automatic Tagging**: Multilabel classification using **Logistic Regression**, **Random Forest**, and **Keras** models.
 - 📊 **Clustering**: Group books by semantic similarity using **K-Means**.
 - 🔍 **Semantic Search**: Discover books based on **cosine similarity** of embeddings.
 - 📖 **Recommendations**: Generate personalized book recommendations.
@@ -29,6 +31,7 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 ## 🛠 **Tech Stack**
 
 - **Programming Language**: Python 3.9+
+- **Deep Learning**: Keras, TensorFlow
 - **NLP Models**: [Sentence-BERT](https://www.sbert.net/), [Hugging Face Transformers](https://huggingface.co/)
 - **Machine Learning**: Scikit-learn, Random Forest, Logistic Regression
 - **Vector Search**: Pinecone
