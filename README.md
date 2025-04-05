@@ -9,35 +9,30 @@
 
 ---
 
-## ✨ Características Principales
+## ✨ **Key Features**
 
-- 🔎 **Búsqueda Semántica**: Encuentra libros y pasajes basados en similitud semántica, no solo por palabras clave.
-- 🏷 **Generación Automática de Etiquetas**: Extrae etiquetas relevantes (topics/keywords) a partir de descripciones de libros o reseñas.
-- 😊 **Análisis de Sentimientos**: Analiza emociones en descripciones de libros usando **VADER** y **RoBERTa**.
-- 📊 **Embeddings**: Utiliza modelos preentrenados (ej. [Sentence-BERT](https://www.sbert.net/)) y bases vectoriales (ej. [Pinecone](https://www.pinecone.io/)) para la indexación y recuperación.
-- 🗃 **Base de Datos MySQL**: Integra la información de libros, autores y tags almacenados en una base de datos relacional.
+- 🏷️ **Automatic Tagging**: Multilabel classification using **Logistic Regression** and **Random Forest** models.
+- 📊 **Clustering**: Group books by semantic similarity using **K-Means**.
+- 🔍 **Semantic Search**: Discover books based on **cosine similarity** of embeddings.
+- 📖 **Recommendations**: Generate personalized book recommendations using **Sentence-BERT embeddings**.
+  - 📊 **Embeddings**: Utiliza modelos NPL preentrenados para la indexación y recuperación:
+    - (ej. [Sentence-BERT](https://www.sbert.net/))
+    - bases vectoriales (ej. [Pinecone](https://www.pinecone.io/))
+    - [Hugging Face Transformers](https://huggingface.co/)
+- 🔗 **Tag Fusion**: Combine predictions from **Logistic Regression**, **Pinecone**, and **noun extraction** for enriched results.
+- 🎭 **Sentiment Analysis**: Analyze emotional tones in book descriptions with **RoBERTa** and **VADER**.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 🛠 **Tech Stack**
 
-```plaintext
-BiblioNLP-Automatic-Tagging-Semantic-Book-Search/
-├── data/
-│   ├── raw/             # Datos crudos (blurbs, reseñas, etc.)
-│   └── processed/       # Datos procesados para uso del modelo
-├── notebooks/
-│   ├── eda.ipynb        # Exploratory Data Analysis
-│   ├── nlp_sentiment_analysis_books_pipeline_es.ipynb  # Sentiment analysis pipeline
-├── src/
-│   ├── embeddings/      # Scripts para generar y almacenar embeddings
-│   ├── search/          # Lógica de búsqueda semántica
-│   ├── tagging/         # Módulo de generación de etiquetas
-│   └── utils/           # Funciones auxiliares (preprocesamiento, etc.)
-├── requirements.txt     # Python dependencies
-├── LICENSE              # License file
-└── README.md            # Project documentation
-```
+- **Programming Language**: Python 3.9+
+- **NLP Models**: [Sentence-BERT](https://www.sbert.net/), [Hugging Face Transformers](https://huggingface.co/)
+- **Machine Learning**: Scikit-learn, Random Forest, Logistic Regression
+- **Vector Search**: Pinecone
+- **Visualization**: Streamlit, Matplotlib, Seaborn
+- **Data Processing**: Pandas, NumPy
+- **Deployment**: Streamlit App
 
 ---
 
@@ -143,20 +138,8 @@ print(predicted_tags)
 ## 🛠 Streamlit
 
 ```python
-streamlit run src/apps/app_streamlit.py --server.runOnSave true
+streamlit run src/app_streamlit.py --server.runOnSave true
 ```
-
-## 🛠 Tecnologías y Herramientas
-
-- 🐍 **Python 3.9+**
-- 🧠 **Modelos NLP**: [Sentence-BERT](https://www.sbert.net/), [Hugging Face Transformers](https://huggingface.co/)
-- 📊 **Visualización**: Matplotlib, Seaborn
-- 🗂 **Procesamiento de Datos**: Pandas, NumPy
-- 🏷 **Machine Learning**: Scikit-learn
-- 🗄️ **Base de Datos**: MySQL (opcional)
-- 🗂 **Base Vectorial**: Pinecone (opcional)
-
----
 
 ## 🙌 Contribuciones
 
