@@ -5,7 +5,7 @@
 [![NLP](https://img.shields.io/badge/NLP-Sentiment%20Analysis-green)](https://www.nltk.org/)
 [![Transformers](https://img.shields.io/badge/Transformers-Hugging%20Face-orange)](https://huggingface.co/)
 
-¡Bienvenido/a a **BiblioNLP**! Este proyecto combina **Procesamiento de Lenguaje Natural (NLP)** con análisis de reseñas y descripciones de libros para **generar etiquetas automáticamente** y proporcionar **búsquedas semánticas** en el contenido. Además, incluye un pipeline para **análisis de sentimientos**.
+BiblioNLP is an **AI-powered platform** that combines **Natural Language Processing (NLP)** and **Machine Learning** to transform how we explore books. From **automatic tagging** to **sentiment analysis** and **semantic recommendations**, this project showcases cutting-edge techniques to enhance book discovery.
 
 ---
 
@@ -14,10 +14,10 @@
 - 🏷️ **Automatic Tagging**: Multilabel classification using **Logistic Regression** and **Random Forest** models.
 - 📊 **Clustering**: Group books by semantic similarity using **K-Means**.
 - 🔍 **Semantic Search**: Discover books based on **cosine similarity** of embeddings.
-- 📖 **Recommendations**: Generate personalized book recommendations using **Sentence-BERT embeddings**.
+- 📖 **Recommendations**: Generate personalized book recommendations.
   - 📊 **Embeddings**: Utiliza modelos NPL preentrenados para la indexación y recuperación:
-    - (ej. [Sentence-BERT](https://www.sbert.net/))
-    - bases vectoriales (ej. [Pinecone](https://www.pinecone.io/))
+    - **Sentence-BERT embeddings**: [Sentence-BERT](https://www.sbert.net/)
+    - Bases vectoriales (ej. [Pinecone](https://www.pinecone.io/))
     - [Hugging Face Transformers](https://huggingface.co/)
 - 🔗 **Tag Fusion**: Combine predictions from **Logistic Regression**, **Pinecone**, and **noun extraction** for enriched results.
 - 🎭 **Sentiment Analysis**: Analyze emotional tones in book descriptions with **RoBERTa** and **VADER**.
