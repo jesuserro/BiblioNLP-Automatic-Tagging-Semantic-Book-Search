@@ -53,14 +53,17 @@ cd BiblioNLP
 ### 2. Instala Dependencias
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-
+# Activa el entorno del proyecto
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 
+# [Si fuese necesario] Algunas dependencias en el entorno global
 /usr/bin/python3 -m pip install pinecone
 /usr/bin/python3 -m spacy download en_core_web_sm
 /usr/bin/python3 -m spacy download es_core_news_sm
+/usr/bin/python3 -m pip install tensorflow==2.19.0
 ```
 
 ### 3. Configura Variables de Entorno

@@ -19,8 +19,9 @@ import re
 import configparser
 import os
 import seaborn as sns
+from tensorflow.keras.models import load_model  # Import necesario para cargar modelos Keras
 
-st.set_page_config(page_title="BiblioNLP - Predicción de Tags", page_icon="📚", layout="wide")
+st.set_page_config(page_title="BiblioNLP: Automatic Tagging & Semantic Book Discovery", page_icon="📚", layout="wide")
 
 # Leer configuración desde config.cfg
 config = configparser.ConfigParser()
@@ -579,6 +580,17 @@ with tab2:
                                 # Formatear etiquetas predichas por Random Forest
                                 formatted_rf_tags = format_predicted_tags(predicted_tags_rf, real_tags, [1.0] * len(predicted_tags_rf))
                                 st.markdown(f"- **Predicted by Random Forest (BETA):** {formatted_rf_tags}", unsafe_allow_html=True)
+
+                                # Predicción de etiquetas con el modelo Keras
+                                keras_model = load_model("model/book_tagging_keras_model.keras")  # Usar el nuevo formato
+                                keras_mlb = joblib.load("model/book_tagging_keras_mlb_encoder.pkl")  # El binarizador sigue igual
+                                X_test_keras = embedding_model.encode([text])
+                                preds_keras = keras_model.predict(X_test_keras)
+                                predicted_tags_keras = keras_mlb.inverse_transform((preds_keras > 0.5).astype(int))[0]
+
+                                # Formatear etiquetas predichas por el modelo Keras
+                                formatted_keras_tags = format_predicted_tags(predicted_tags_keras, real_tags, [1.0] * len(predicted_tags_keras))
+                                st.markdown(f"- **Predicted by Keras Model:** {formatted_keras_tags}", unsafe_allow_html=True)
 
                                 # Etiquetas sustantivas
                                 noun_tags = ensemble_result["tags_nouns"]

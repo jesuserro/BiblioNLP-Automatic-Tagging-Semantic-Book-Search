@@ -11,6 +11,7 @@ __pycache__/
 .history/
 .vscode/
 config.cfg
+.venv/
 
 # Entorno virtual
 venv/
