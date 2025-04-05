@@ -1,4 +1,6 @@
-# 📚 BiblioNLP: Automatic Tagging & Sentiment Analysis for Books
+# 📚 **BiblioNLP: Semantic Book Discovery**
+
+*Unlock the power of AI to tag, cluster, and recommend books seamlessly.*
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
