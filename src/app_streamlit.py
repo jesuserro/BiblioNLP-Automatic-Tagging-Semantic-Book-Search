@@ -21,6 +21,7 @@ import os
 import seaborn as sns
 from tensorflow.keras.models import load_model  # Import necesario para cargar modelos Keras
 
+
 st.set_page_config(page_title="BiblioNLP: Automatic Tagging & Semantic Book Discovery", page_icon="📚", layout="wide")
 
 # Leer configuración desde config.cfg
@@ -32,8 +33,12 @@ config.read(config_path)
 if "pinecone" not in config:
     raise ValueError("No se encontró la sección [pinecone] en el archivo config.cfg")
 
+# st.write("### 🔍 Versiones de Paquetes Relevantes")
 # st.write(f"Python executable: {sys.executable}")
 # st.write(f"Python version: {sys.version}")
+# st.write(f"Transformers version: {transformers.__version__}")
+# st.write(f"Joblib version: {joblib.__version__}")
+# st.write(f"Torch version: {torch.__version__}")
 
 # Constantes para las URLs de los modelos
 TAGGING_MODEL_URL        = "model/book_tagging_pipeline.joblib"

@@ -15,6 +15,20 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 
 ---
 
+## 📊 Ejemplo de Resultados
+
+### Generación de Etiquetas
+
+```python
+new_titles = ["La conspiración del universo"]
+new_blurbs = ["Una historia que entrelaza ciencia, fe y filosofía para revelar los secretos de la creación."]
+predicted_tags = predict_tags(new_titles, new_blurbs)
+print(predicted_tags)
+# Output: [('philosophy', 'science', 'to-read')]
+```
+
+---
+
 | **Técnica Clave**                          | **Visualización**                                                                 |
 |--------------------------------------------|-----------------------------------------------------------------------------------|
 | **Clustering**: Agrupa libros por similitud semántica usando **K-Means** y visualiza la distribución. | ![Clustering](img/clustering_books.jpg) ![Silhouette Plot](img/silhouette_plot_no_tags.jpg) |
@@ -114,18 +128,6 @@ python src/search/semantic_search.py --query "magia y aventuras"
   - Aplica RoBERTa para extraer puntajes de emociones desde texto.
 
 ---
-
-## 📊 Ejemplo de Resultados
-
-### Generación de Etiquetas
-
-```python
-new_titles = ["La conspiración del universo"]
-new_blurbs = ["Una historia que entrelaza ciencia, fe y filosofía para revelar los secretos de la creación."]
-predicted_tags = predict_tags(new_titles, new_blurbs)
-print(predicted_tags)
-# Output: [('philosophy', 'science', 'to-read')]
-```
 
 ### Análisis de Sentimientos
 
