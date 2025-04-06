@@ -67,8 +67,13 @@ pip install --upgrade --no-deps -r requirements.txt
 /usr/bin/python3 -m spacy download es_core_news_sm
 /usr/bin/python3 -m pip install tensorflow==2.19.0
 
-# Regenerar sentimientos:
+# Regenerar modelos para la app
 python src/regenerate_sentiment_model.py
+python src/regenerate_semantic_search.py
+python src/regenerate_keras.py
+
+# Apertura app
+streamlit run src/app_streamlit.py --server.runOnSave true
 ```
 
 ### 3. Configura Variables de Entorno
@@ -135,12 +140,6 @@ python src/search/semantic_search.py --query "magia y aventuras"
 - **RoBERTa**: Analiza emociones como `joy` o `sadness` en descripciones de libros.
 
 ---
-
-## 🛠 Streamlit
-
-```python
-streamlit run src/app_streamlit.py --server.runOnSave true
-```
 
 ## 🙌 Contribuciones
 
