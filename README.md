@@ -15,31 +15,12 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 
 ---
 
-## ✨ **Key Features**
-
-- 🏷️ **Automatic Tagging**: Multilabel classification using **Logistic Regression**, **Random Forest**, and **Keras** models.
-- 📊 **Clustering**: Group books by semantic similarity using **K-Means**.
-- 🔍 **Semantic Search**: Discover books based on **cosine similarity** of embeddings.
-- 📖 **Recommendations**: Generate personalized book recommendations.
-  - 📊 **Embeddings**: Utiliza modelos NPL preentrenados para la indexación y recuperación:
-    - **Sentence-BERT embeddings**: [Sentence-BERT](https://www.sbert.net/)
-    - Bases vectoriales (ej. [Pinecone](https://www.pinecone.io/))
-    - [Hugging Face Transformers](https://huggingface.co/)
-- 🔗 **Tag Fusion**: Combine predictions from **Logistic Regression**, **Pinecone**, and **noun extraction** for enriched results.
-- 🎭 **Sentiment Analysis**: Analyze emotional tones in book descriptions with **RoBERTa** and **VADER**.
-
----
-
-## 🛠 **Tech Stack**
-
-- **Programming Language**: Python 3.9+
-- **Deep Learning**: Keras, TensorFlow
-- **NLP Models**: [Sentence-BERT](https://www.sbert.net/), [Hugging Face Transformers](https://huggingface.co/)
-- **Machine Learning**: Scikit-learn, Random Forest, Logistic Regression
-- **Vector Search**: Pinecone
-- **Visualization**: Streamlit, Matplotlib, Seaborn
-- **Data Processing**: Pandas, NumPy
-- **Deployment**: Streamlit App
+| **Técnica Clave**                          | **Visualización**                                                                 |
+|--------------------------------------------|-----------------------------------------------------------------------------------|
+| **Clustering**: Agrupa libros por similitud semántica usando **K-Means** y visualiza la distribución. | ![Clustering](img/clustering_books.jpg) ![Silhouette Plot](img/silhouette_plot_no_tags.jpg) |
+| **Análisis de Sentimientos**: Detecta emociones como `joy`, `sadness`, y `anger` en descripciones de libros con **RoBERTa**. | ![Sentiment Analysis](img/roberta-emotions.jpg)                                   |
+| **Distribución de Etiquetas**: Visualiza los **top-30 scores** por etiqueta para entender tendencias. | ![Tag Distribution](img/tag_distribution.jpg)                                     |
+| **Precisión por Muestra**: Analiza la precisión del modelo con un histograma de **accuracy per sample**. | ![Accuracy per Sample](img/accuracy_per_sample_hist.jpg)                          |
 
 ---
 
