@@ -11,6 +11,8 @@
 
 BiblioNLP is an **AI-powered platform** that combines **Natural Language Processing (NLP)** and **Machine Learning** to transform how we explore books. From **automatic tagging** to **sentiment analysis** and **semantic recommendations**, this project showcases cutting-edge techniques to enhance book discovery.
 
+![Portada](img/tag_wordcloud.jpg)
+
 ---
 
 ## ✨ **Key Features**
@@ -54,16 +56,24 @@ cd BiblioNLP
 
 ```bash
 # Activa el entorno del proyecto
+rm -rf .venv
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements.txt --progress-bar on
+
+# Si ya existe el entorno, puedes actualizar librerías según el requirements
+pip install --upgrade --no-deps -r requirements.txt
 
 # [Si fuese necesario] Algunas dependencias en el entorno global
+/usr/bin/python3 -m pip list
 /usr/bin/python3 -m pip install pinecone
 /usr/bin/python3 -m spacy download en_core_web_sm
 /usr/bin/python3 -m spacy download es_core_news_sm
 /usr/bin/python3 -m pip install tensorflow==2.19.0
+
+# Regenerar sentimientos:
+python src/regenerate_sentiment_model.py
 ```
 
 ### 3. Configura Variables de Entorno
