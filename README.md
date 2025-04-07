@@ -13,7 +13,6 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 
 ![Automatic Tagging](img/streamlit_app.jpg)
 
----
 
 ## 📊 Automatic tag generator
 
@@ -27,7 +26,6 @@ print(predicted_tags)
 
 ![Portada](img/tag_wordcloud.jpg)
 
----
 
 | **Técnica Clave**                          | **Visualización**                                                                 |
 |--------------------------------------------|-----------------------------------------------------------------------------------|
@@ -36,7 +34,6 @@ print(predicted_tags)
 | **Distribución de Etiquetas**: Visualiza los **top-30 scores** por etiqueta para entender tendencias. | ![Tag Distribution](img/f1_score_per_tag.jpg)                                     |
 | **Precisión por Muestra**: Analiza la precisión del modelo con un histograma de **accuracy per sample**. | ![Accuracy per Sample](img/accuracy_per_sample_hist.jpg)                          |
 
----
 
 ## 🚀 Instalación y Uso
 
@@ -102,8 +99,6 @@ Ejecuta el notebook `notebooks/nlp_sentiment_analysis_books_pipeline_es.ipynb` p
 python src/search/semantic_search.py --query "magia y aventuras"
 ```
 
----
-
 ## 🛠 Técnicas y Modelos
 
 ### 1. **Pipeline de Generación de Etiquetas**
@@ -112,7 +107,7 @@ python src/search/semantic_search.py --query "magia y aventuras"
 - **Embeddings**: Generados con `SentenceTransformer` usando el modelo multilingüe `paraphrase-multilingual-MiniLM-L12-v2`.
   - URL en Hugging Face: [sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)
 - **Clasificador**: Modelo de **Logistic Regression** envuelto en un `MultiOutputClassifier` para clasificación multilabel.
-- **Output**: Predice etiquetas relevantes (ej. `philosophy`, `science`, `to-read`).
+- **Output**: Predice etiquetas relevantes (ej. `philosophy`, `science`, `astronomy`).
 
 ### 2. **Pipeline de Análisis de Sentimientos**
 
@@ -132,8 +127,6 @@ python src/search/semantic_search.py --query "magia y aventuras"
 - **`mooder`**:
   - Aplica RoBERTa para extraer puntajes de emociones desde texto.
 
----
-
 ## 🙌 Contribuciones
 
 ¡Las contribuciones son siempre bienvenidas!
@@ -144,13 +137,9 @@ python src/search/semantic_search.py --query "magia y aventuras"
 4. Sube la rama (`git push origin nombre-rama`).
 5. Abre un Pull Request detallando tus cambios.
 
----
-
 ## ⚖️ Licencia
 
 Este proyecto se distribuye bajo la licencia [MIT](LICENSE). ¡Siéntete libre de usarlo y mejorarlo!
-
----
 
 > **Nota:** Este repositorio es parte de un proyecto de aprendizaje e investigación de NLP, por lo cual no garantiza escalabilidad de producción sin ajustes adicionales.
 
