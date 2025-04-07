@@ -33,7 +33,7 @@ print(predicted_tags)
 |--------------------------------------------|-----------------------------------------------------------------------------------|
 | **Clustering**: Agrupa libros por similitud semántica usando **K-Means** y visualiza la distribución. | ![Clustering](img/clustering_books.jpg) ![Silhouette Plot](img/silhouette_plot_no_tags.jpg) |
 | **Análisis de Sentimientos**: Detecta emociones como `joy`, `sadness`, y `anger` en descripciones de libros con **RoBERTa**. | ![Sentiment Analysis](img/roberta-emotions.jpg)                                   |
-| **Distribución de Etiquetas**: Visualiza los **top-30 scores** por etiqueta para entender tendencias. | ![Tag Distribution](img/tag_distribution.jpg)                                     |
+| **Distribución de Etiquetas**: Visualiza los **top-30 scores** por etiqueta para entender tendencias. | ![Tag Distribution](img/f1_score_per_tag.jpg)                                     |
 | **Precisión por Muestra**: Analiza la precisión del modelo con un histograma de **accuracy per sample**. | ![Accuracy per Sample](img/accuracy_per_sample_hist.jpg)                          |
 
 ---
