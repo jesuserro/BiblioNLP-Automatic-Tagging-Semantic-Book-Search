@@ -11,7 +11,7 @@
 
 BiblioNLP is an **AI-powered platform** that combines **Natural Language Processing (NLP)** and **Machine Learning** to transform how we explore books. From **automatic tagging** to **sentiment analysis** and **semantic recommendations**, this project showcases cutting-edge techniques to enhance book discovery.
 
-![Automatic Tagging](img/streamlit_app.jpg)
+![Portada](img/tag_wordcloud.jpg)
 
 ## 🤖🏷️ Automatic Tag Generator
 
@@ -63,9 +63,6 @@ print(predicted_tags)
 ['allegories', 'ancient-literature', 'classics', 'greek', 'history', 'philosophy', 'politics', 'virtues', 'women']
 ['art', 'essays']
 ```
-
-![Portada](img/tag_wordcloud.jpg)
-
 
 | **Técnica Clave**                          | **Visualización**                                                                 |
 |--------------------------------------------|-----------------------------------------------------------------------------------|
@@ -148,6 +145,8 @@ python src/search/semantic_search.py --query "magia y aventuras"
   - URL en Hugging Face: [sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)
 - **Clasificador**: Modelo de **Logistic Regression** envuelto en un `MultiOutputClassifier` para clasificación multilabel.
 - **Output**: Predice etiquetas relevantes (ej. `philosophy`, `science`, `astronomy`).
+
+![Automatic Tagging](img/streamlit_app.jpg)
 
 ### 2. **Pipeline de Análisis de Sentimientos**
 
