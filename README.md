@@ -64,14 +64,6 @@ print(predicted_tags)
 ['art', 'essays']
 ```
 
-| **Técnica Clave**                          | **Visualización**                                                                 |
-|--------------------------------------------|-----------------------------------------------------------------------------------|
-| **Clustering**: Agrupa libros por similitud semántica usando **K-Means** y visualiza la distribución. | ![Clustering](img/clustering_books.jpg) ![Silhouette Plot](img/silhouette_plot_no_tags.jpg) |
-| **Análisis de Sentimientos**: Detecta emociones como `joy`, `sadness`, y `anger` en descripciones de libros con **RoBERTa**. | ![Sentiment Analysis](img/roberta-emotions.jpg)                                   |
-| **Distribución de Etiquetas**: Visualiza los **top-30 scores** por etiqueta para entender tendencias. | ![Tag Distribution](img/f1_score_per_tag.jpg)                                     |
-| **Precisión por Muestra**: Analiza la precisión del modelo con un histograma de **accuracy per sample**. | ![Accuracy per Sample](img/accuracy_per_sample_hist.jpg)                          |
-
-
 ## 🚀 Instalación y Uso
 
 ### 1. Clona el Repositorio
@@ -118,24 +110,6 @@ export MYSQL_PASS="tu_contraseña"
 export PINECONE_API_KEY="tu_api_key"
 ```
 
-### 4. Ejecuta un Script de Prueba
-
-#### Generación de Etiquetas
-
-```bash
-python src/tagging/main.py
-```
-
-#### Análisis de Sentimientos
-
-Ejecuta el notebook `notebooks/nlp_sentiment_analysis_books_pipeline_es.ipynb` para realizar análisis exploratorio de sentimientos.
-
-#### Búsqueda Semántica
-
-```bash
-python src/search/semantic_search.py --query "magia y aventuras"
-```
-
 ## 🛠 Técnicas y Modelos
 
 ### 1. **Pipeline de Generación de Etiquetas**
@@ -148,7 +122,19 @@ python src/search/semantic_search.py --query "magia y aventuras"
 
 ![Automatic Tagging](img/streamlit_app.jpg)
 
+#### Model Evaluation
+
+- **Distribución de Etiquetas**: Visualiza los **top-30 scores** por etiqueta para entender tendencias.
+
+![Tag Distribution](img/f1_score_per_tag.jpg)
+
+- **Precisión por Muestra**: Analiza la precisión del modelo con un histograma de **accuracy per sample**.
+
+![Accuracy per Sample](img/accuracy_per_sample_hist.jpg)
+
 ### 2. **Pipeline de Análisis de Sentimientos**
+
+![Sentiment Analysis](img/roberta-emotions.jpg)
 
 - **VADER**:
   - Herramienta basada en reglas para análisis de sentimientos.
@@ -158,13 +144,21 @@ python src/search/semantic_search.py --query "magia y aventuras"
   - Detecta emociones como `joy`, `sadness`, `anger`, `fear`, etc.
   - Aplicado a descripciones de libros para obtener insights emocionales.
 
-### 3. **Funciones Reutilizables**
+### 3. **Clustering**
+
+Agrupa libros por similitud semántica usando **K-Means** y visualiza la distribución.
+
+![Clustering](img/clustering_books.jpg)
+
+![Silhouette Plot](img/silhouette_plot_no_tags.jpg)
+
+### 4. **Funciones Reutilizables**
 
 - **`predict_tags`**:
   - Predice etiquetas para nuevos libros basándose en sus títulos y descripciones.
   - Clasificación multilabel con umbral ajustable.
 - **`mooder`**:
-  - Aplica RoBERTa para extraer puntajes de emociones desde texto.
+  - Aplica RoBERTa para extraer puntajes de emociones desde texto.                         |
 
 ## 🙌 Contribuciones
 
