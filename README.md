@@ -13,15 +13,55 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 
 ![Automatic Tagging](img/streamlit_app.jpg)
 
+## 🤖🏷️ Automatic Tag Generator
 
-## 📊 Automatic tag generator
+Este es un ejemplo de cómo se utiliza el modelo para predecir etiquetas a partir de títulos y descripciones de libros.
 
 ```python
-new_titles = ["Contact"]
-new_blurbs = ["In December of 1999, a multinational team journeys out to the stars, to the most awesome encounter in human history. Who—or what—is out there? In Cosmos, Carl Sagan explained the universe. In Contact, he predicts its future—and our own."]
+# Ejemplo de predicción de etiquetas
+new_titles = [
+    "Cosmos",
+    "Clean Code",
+    "True Devotion to Mary",
+    "The Divine Comedy",
+    "Fear and Trembling",
+    "Pride and Prejudice",
+    "The Diary of a Young Girl",
+    "The History of the Decline and Fall of the Roman Empire",
+    "Republic",
+    "The Story of Art"
+]
+
+new_blurbs = [
+    "Carl Sagan’s groundbreaking exploration of the universe, tracing humanity’s quest to understand the cosmos.",
+    "Robert C. Martin’s influential guide to writing clean, understandable, and maintainable code.",
+    "St. Louis de Montfort’s enduring spiritual classic, reflecting on the profound significance of devotion to the Virgin Mary.",
+    "Dante Alighieri’s epic poem traversing Hell, Purgatory, and Heaven, illuminating the depths of human nature and redemption.",
+    "Søren Kierkegaard’s seminal work on existential anxiety, faith, and the leap beyond rational understanding.",
+    "Jane Austen’s beloved novel about love and social expectations in Georgian England.",
+    "Anne Frank’s harrowing yet hopeful personal account of life in hiding during World War II.",
+    "Edward Gibbon’s exhaustive chronicle tracing the factors behind the collapse of the Roman Empire.",
+    "Plato’s foundational philosophical dialogue exploring justice, society, and the ideal state.",
+    "E. H. Gombrich’s accessible survey tracing the evolution of art from prehistoric times to the modern era."
+]
+
 predicted_tags = predict_tags(new_titles, new_blurbs)
 print(predicted_tags)
-# Output: [('philosophy', 'science', 'astronomy', 'classics')]
+```
+
+### 🧾 Output
+
+```text
+['astronomy', 'creation', 'philosophy', 'physics', 'science', 'space']
+['programming']
+['apparitions', 'biography', 'catholic', 'classics', 'devotional', 'france', 'holiness', 'illustrated', 'nuns', 'saints', 'spirituality', 'virgin-mary', 'women']
+['catholic', 'classics', 'medieval', 'poetry', 'spirituality']
+['anxiety', 'christianity', 'mental-health', 'miex', 'nonfiction', 'philosophy', 'psichology', 'selfhelp', 'suffering', 'theology']
+['apologetics', 'biography', 'classics', 'courtship', 'emotional-relationships', 'essays', 'family', 'fiction', 'history', 'hope', 'love', 'marriage', 'philosophy', 'poetry', 'psichology', 'romance', 'selfhelp', 'virtues', 'women']
+['biography', 'classics', 'fiction', 'memoir', 'psichology', 'romance', 'women']
+['anti-catholics', 'church-history', 'communism', 'essays', 'history']
+['allegories', 'ancient-literature', 'classics', 'greek', 'history', 'philosophy', 'politics', 'virtues', 'women']
+['art', 'essays']
 ```
 
 ![Portada](img/tag_wordcloud.jpg)
