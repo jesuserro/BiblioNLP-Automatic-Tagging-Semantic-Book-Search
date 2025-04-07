@@ -15,7 +15,7 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 
 ## 🤖🏷️ Automatic Tag Generator
 
-Este es un ejemplo de cómo se utiliza el modelo para predecir etiquetas a partir de títulos y descripciones de libros.
+This is an example of how the model is used to predict labels from book titles and descriptions.
 
 ```python
 # Ejemplo de predicción de etiquetas
