@@ -17,11 +17,11 @@ BiblioNLP is an **AI-powered platform** that combines **Natural Language Process
 ## 📊 Automatic tag generator
 
 ```python
-new_titles = ["La conspiración del universo"]
-new_blurbs = ["Una historia que entrelaza ciencia, fe y filosofía para revelar los secretos de la creación."]
+new_titles = ["Contact"]
+new_blurbs = ["In December of 1999, a multinational team journeys out to the stars, to the most awesome encounter in human history. Who—or what—is out there? In Cosmos, Carl Sagan explained the universe. In Contact, he predicts its future—and our own."]
 predicted_tags = predict_tags(new_titles, new_blurbs)
 print(predicted_tags)
-# Output: [('philosophy', 'science', 'to-read')]
+# Output: [('philosophy', 'science', 'astronomy', 'classics')]
 ```
 
 ![Portada](img/tag_wordcloud.jpg)
