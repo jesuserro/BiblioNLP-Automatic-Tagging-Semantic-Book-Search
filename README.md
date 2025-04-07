@@ -11,13 +11,11 @@
 
 BiblioNLP is an **AI-powered platform** that combines **Natural Language Processing (NLP)** and **Machine Learning** to transform how we explore books. From **automatic tagging** to **sentiment analysis** and **semantic recommendations**, this project showcases cutting-edge techniques to enhance book discovery.
 
-![Portada](img/tag_wordcloud.jpg)
+![Automatic Tagging](img/streamlit_app.jpg)
 
 ---
 
-## 📊 Ejemplo de Resultados
-
-### Generación de Etiquetas
+## 📊 Automatic tag generator
 
 ```python
 new_titles = ["La conspiración del universo"]
@@ -26,6 +24,8 @@ predicted_tags = predict_tags(new_titles, new_blurbs)
 print(predicted_tags)
 # Output: [('philosophy', 'science', 'to-read')]
 ```
+
+![Portada](img/tag_wordcloud.jpg)
 
 ---
 
@@ -131,13 +131,6 @@ python src/search/semantic_search.py --query "magia y aventuras"
   - Clasificación multilabel con umbral ajustable.
 - **`mooder`**:
   - Aplica RoBERTa para extraer puntajes de emociones desde texto.
-
----
-
-### Análisis de Sentimientos
-
-- **VADER**: Visualiza la distribución de sentimientos (`compound` scores).
-- **RoBERTa**: Analiza emociones como `joy` o `sadness` en descripciones de libros.
 
 ---
 
